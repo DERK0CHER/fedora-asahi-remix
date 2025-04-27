@@ -1,0 +1,156 @@
+$rootTransparency: 1; // Set to 1 for full transparency (0 opacity)
+$transparency: 1; // Set to 1 for full transparency (0 opacity)
+
+// Force transparent = True to ensure transparency processing
+$transparent: True;
+
+// Transparent versions
+@if $transparent == True {
+  $background: transparent;
+  $surface: transparent;
+  $surfaceDim: transparent;
+  $surfaceBright: transparent;
+  $surfaceContainerLowest: transparent;
+  $surfaceContainerLow: transparent;
+  $surfaceContainer: transparent;
+  $surfaceContainerHigh: transparent;
+  $surfaceContainerHighest: transparent;
+  $surfaceVariant: transparent;
+  $inverseSurface: transparent;
+  $surfaceTint: transparent;
+}
+
+// Others
+$subtext: $outline;
+$actiontext: mix($onBackground, transparent, 85%);
+$black: transparent;
+$white: white;
+
+/// Color mappings for more chaotic, dynamic colors like the average rice ///
+// General
+$layer0: transparent !important;
+$onLayer0: $onBackground;
+$layer0Hover: transparent !important;
+$layer0Active: transparent !important;
+$onLayer0Active: $onSurface;
+$onLayer0Inactive: mix($onLayer0, transparent, 70%);
+$layer1: transparent !important;
+$onLayer1: $onSurface;
+$onLayer1Inactive: mix($onLayer1, transparent, 45%);
+$onLayer1: $onSurfaceVariant;
+$layer2: transparent !important;
+$onLayer2: $onSurface;
+$layer3: transparent !important;
+$onLayer3: $onSurface;
+$layer1Hover: transparent !important;
+$layer1Active: transparent !important;
+$layer2Hover: transparent !important;
+$layer2Active: transparent !important;
+$layer3Hover: transparent !important;
+$layer3Active: transparent !important;
+
+// Elements - keeping text colors but making all backgrounds transparent
+$windowtitleOnLayer0Inactive: $onLayer0Inactive;
+$windowtitleOnLayer0: $onLayer0;
+$barspacerightOnLayer0: $onLayer0;
+$timeOnLayer1: $onLayer1;
+$dateOnLayer1: $onLayer1;
+$ramOnLayer1: $onLayer1;
+$ramLayer2: transparent !important;
+$ramOnLayer2: $onSecondaryContainer;
+$swapOnLayer1: $onLayer1;
+$swapLayer2: transparent !important;
+$swapOnLayer2: $onSecondaryContainer;
+$cpuOnLayer1: $onLayer1;
+$cpuLayer2: transparent !important;
+$cpuOnLayer2: $onSecondaryContainer;
+$musicOnLayer1: $onLayer1;
+$musicLayer2: transparent !important;
+$musicOnLayer2: $onSecondaryContainer;
+$utilsLayer2: transparent !important;
+$utilsOnLayer2: $onLayer2;
+$battOnLayer1: $onLayer1;
+$battLayer2: transparent !important;
+$battOnLayer2: $onSecondaryContainer;
+$workspaceOnLayer1Inactive: $onLayer1Inactive;
+$workspaceLayer3: transparent !important;
+$workspaceOnLayer3: $onPrimary;
+$workspaceOnLayer2: $onSecondaryContainer;
+$trayOnLayer0: $onLayer0;
+$cheatsheetTitle: $onSecondaryContainer;
+$cheatsheetColors: (
+  $onSecondaryContainer,
+  $onSecondaryContainer,
+  $onSecondaryContainer,
+  $onSecondaryContainer,
+  $onSecondaryContainer,
+  $onSecondaryContainer,
+  $onSecondaryContainer,
+  $onSecondaryContainer
+);
+$sessionColors: (
+  $onLayer1,
+  $onLayer1,
+  $onLayer1,
+  $onLayer1,
+  $onLayer1,
+  $onLayer1,
+  $onLayer1
+);
+$brightnessOnLayer0: $onLayer0;
+$volumeOnLayer0: $onLayer0;
+
+// Global transparency overrides to ensure all elements use these values
+// This should be added to your main SCSS file after all imports
+@mixin enforce-transparency {
+  [class*="bar-"],
+  [class*="corner"],
+  [class*="dock-"],
+  [class*="sidebar-"],
+  [class*="osd-"],
+  [class*="overview-"],
+  [class*="session-"],
+  [class*="notification-"],
+  .cheatsheet,
+  .desktop-background,
+  .osk,
+  .music-player,
+  .menu,
+  .popover,
+  .popup {
+    background-color: transparent !important;
+  }
+  
+  // Target all background properties
+  *:not(popover) {
+    background-color: transparent !important;
+  }
+  
+  // Specific overrides for problematic elements
+  .bar-bg,
+  .bar-group,
+  .bar-ws-active,
+  .bar-ws-occupied,
+  .bar-ws-focus-active,
+  .corner,
+  .bar-batt,
+  .bar-ram-icon,
+  .bar-cpu-icon,
+  .bar-swap-icon,
+  .bar-music-playstate,
+  .bar-util-btn,
+  .bar-systray-item,
+  .bar-statusicons {
+    background-color: transparent !important;
+  }
+  
+  // Override hover and active states
+  .bar-util-btn:hover,
+  .bar-util-btn:focus,
+  .bar-util-btn:active {
+    background-color: transparent !important;
+  }
+}
+
+// Call the mixin at the end of your main SCSS file
+@include enforce-transparency;

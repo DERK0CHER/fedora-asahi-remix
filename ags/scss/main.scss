@@ -1,0 +1,201 @@
+// Reset
+*:not(popover) { 
+    all: unset;
+    background-color: transparent !important; 
+  }
+  
+  // Colors
+  @import 'material'; // Material colors
+  @import './colors'; // Global color definitions. Uses material colors as base.
+  @import './lib_mixins';
+  @import 'lib_mixins_overrides';
+  @import './lib_classes';
+  @import './common'; // Context menu n stuff
+  
+  // Force transparent variables
+  $rootTransparency: 1; // Set to 1 for full transparency (0 opacity)
+  $transparency: 1; // Set to 1 for full transparency (0 opacity)
+  $transparent: True;
+  
+  // Override all background-related variables
+  $layer0: transparent !important;
+  $layer1: transparent !important;
+  $layer2: transparent !important;
+  $layer3: transparent !important;
+  $workspaceLayer3: transparent !important;
+  $onLayer0: transparent !important;
+  $surfaceVariant: transparent !important;
+  $secondaryContainer: transparent !important;
+  $battLayer2: transparent !important;
+  $error: transparent !important;
+  $ramLayer2: transparent !important;
+  $swapLayer2: transparent !important;
+  $cpuLayer2: transparent !important;
+  $musicLayer2: transparent !important;
+  $black: transparent !important;
+  $layer0Active: transparent !important;
+  $layer2Hover: transparent !important;
+  $layer2Active: transparent !important;
+  $utilsLayer2: transparent !important;
+  $background: transparent !important;
+  $surface: transparent !important;
+  
+  // Components
+  @import './bar';
+  @import './cheatsheet';
+  @import './desktopbackground';
+  @import './dock';
+  @import './osd';
+  @import './overview';
+  @import './osk';
+  @import './sidebars';
+  @import './session';
+  @import './notifications';
+  // Music is put last as it might mess stuff up with pywal
+  @import './music'; // Everything related to music is here
+  
+  // Classes for interaction
+  .growingRadial {
+    transition: 300ms cubic-bezier(0.2, 0.0, 0, 1.0);
+    background-color: transparent !important;
+  }
+  
+  .fadingRadial {
+    transition: 50ms cubic-bezier(0.2, 0.0, 0, 1.0);
+    background-color: transparent !important;
+  }
+  
+  .sidebar-pinned {
+    margin: 0rem;
+    border-radius: 0rem;
+    border-bottom-right-radius: $rounding_large;
+    border: 0rem solid;
+    background-color: transparent !important;
+  }
+  
+  // Transparency specific overrides - These will force transparency for all bar elements
+  .transparent-window, 
+  .transparent-bg,
+  [class*="bar-"], 
+  [class*="corner"],
+  .bar-bg,
+  .bar-bg-focus,
+  .bar-bg-nothing,
+  .bar-bg-focus-batterylow,
+  .bar-group,
+  .bar-group-borderless,
+  .bar-group-standalone,
+  .bar-group-round,
+  .bar-group-middle,
+  .bar-group-left,
+  .bar-group-right,
+  .bar-ws-active,
+  .bar-ws-occupied,
+  .bar-ws-focus,
+  .bar-ws-focus-active,
+  .bar-ws-focus-occupied,
+  .bar-batt,
+  .bar-batt-circprog,
+  .bar-batt-circprog-low,
+  .bar-batt-low,
+  .bar-ram-icon,
+  .bar-ram-circprog,
+  .bar-ram-circprog-borderless,
+  .bar-swap-icon,
+  .bar-swap-circprog,
+  .bar-swap-circprog-borderless,
+  .bar-cpu-icon,
+  .bar-cpu-circprog,
+  .bar-cpu-circprog-borderless,
+  .bar-music-playstate,
+  .bar-music-circprog,
+  .bar-music-circprog-borderless,
+  .bar-music-playstate-playing,
+  .bar-music-extended-bg,
+  .corner,
+  .corner-black,
+  .bar-systray,
+  .bar-systray-item,
+  .bar-statusicons,
+  .bar-statusicons-active,
+  .bar-util-btn,
+  .bar-util-btn-borderless,
+  .bar-bluetooth-device {
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border-image: none !important;
+  }
+  
+  // Override pseudoclasses
+  *:hover,
+  *:focus,
+  *:active,
+  .bar-util-btn:hover,
+  .bar-util-btn:focus,
+  .bar-util-btn:active,
+  [class*="bar-"]:hover,
+  [class*="bar-"]:focus,
+  [class*="bar-"]:active {
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+  
+  // Bar-specific overrides
+  .bar-height {
+    min-height: 2.727rem;
+    background-color: transparent !important;
+  }
+  
+  .bar-bg {
+    background-color: transparent !important;
+    min-height: 2.727rem;
+  }
+  
+  .bar-bg-focus {
+    background-color: transparent !important;
+    min-height: 1.364rem;
+  }
+  
+  .bar-bg-nothing {
+    background-color: transparent !important;
+    min-height: 2px;
+  }
+  
+  .bar-bg-focus-batterylow {
+    background-color: transparent !important;
+  }
+  
+  // GTK-specific overrides
+  window, box, button, menubar, menu, popover, overlay, tooltip {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-decoration: none !important;
+  }
+  
+  // Important GTK properties
+  * {
+    -gtk-background-type: none !important;
+    -gtk-background-origin: padding-box !important;
+    -gtk-icon-shadow: none !important;
+    -gtk-box-shadow: none !important;
+  }
+  
+  // Animation to continuously enforce transparency
+  @keyframes removeBackgrounds {
+    to {
+      background: transparent !important;
+      background-color: transparent !important;
+      background-image: none !important;
+    }
+  }
+  
+  * {
+    animation: removeBackgrounds 0.1s forwards !important;
+  }
+  
+  // Special override for AGS widgets
+  .window-content {
+    background-color: transparent !important;
+  }

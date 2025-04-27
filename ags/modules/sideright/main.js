@@ -1,8 +1,7 @@
 import PopupWindow from '../.widgethacks/popupwindow.js';
 import SidebarRight from "./sideright.js";
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
-const { Box } = Widget;
-import clickCloseRegion from '../.commonwidgets/clickcloseregion.js';
+const { Box, EventBox } = Widget;
 
 export default () => PopupWindow({
     keymode: 'on-demand',
@@ -10,8 +9,16 @@ export default () => PopupWindow({
     name: 'sideright',
     layer: 'top',
     child: Box({
+        className: 'transparent-bg', // Add a class for CSS targeting
+        css: 'background-color: transparent !important;', // Direct CSS transparency
         children: [
-            clickCloseRegion({ name: 'sideright', multimonitor: false, fillMonitor: 'horizontal' }),
+            // Create a simple EventBox to handle click-to-close instead of using clickCloseRegion
+            EventBox({
+                css: 'background-color: transparent !important;',
+                onPrimaryClick: () => App.closeWindow('sideright'),
+                onSecondaryClick: () => App.closeWindow('sideright'),
+                onMiddleClick: () => App.closeWindow('sideright'),
+            }),
             SidebarRight(),
         ]
     })

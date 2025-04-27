@@ -69,7 +69,7 @@ const centerWidgets = [
 ];
 
 const timeRow = Box({
-    className: 'spacing-h-10 sidebar-group-invisible-morehorizpad transparent-bg',
+    className: 'spacing-h-10 sidebar-group-invisible-morehorizpad',
     children: [
         Widget.Icon({
             icon: getDistroIcon(),
@@ -130,13 +130,13 @@ const timeRow = Box({
 
 const togglesBox = Widget.Box({
     hpack: 'center',
-    className: 'sidebar-togglesbox spacing-h-5 transparent-bg',
+    className: 'sidebar-togglesbox spacing-h-5',
     children: userOptions.sidebar.quickToggles.order.map(toggle => QUICK_TOGGLES[toggle])
 })
 
 export const sidebarOptionsStack = ExpandingIconTabContainer({
     tabsHpack: 'center',
-    tabSwitcherClassName: 'sidebar-icontabswitcher transparent-bg',
+    tabSwitcherClassName: 'sidebar-icontabswitcher',
     icons: centerWidgets.map((api) => api.materialIcon),
     names: centerWidgets.map((api) => api.name),
     children: centerWidgets.map((api) => api.contentWidget()),
@@ -149,10 +149,10 @@ export const sidebarOptionsStack = ExpandingIconTabContainer({
 export default () => Box({
     vexpand: true,
     hexpand: true,
-    css: 'min-width: 2px;',
-    className: 'transparent-bg',
+    css: 'min-width: 2px; background-color: transparent !important;',
     children: [
         EventBox({
+            css: 'background-color: transparent !important;',
             onPrimaryClick: () => App.closeWindow('sideright'),
             onSecondaryClick: () => App.closeWindow('sideright'),
             onMiddleClick: () => App.closeWindow('sideright'),
@@ -160,18 +160,21 @@ export default () => Box({
         Box({
             vertical: true,
             vexpand: true,
-            className: 'sidebar-right spacing-v-15 transparent-bg',
+            css: 'background-color: transparent !important;',
+            className: 'sidebar-right spacing-v-15',
             children: [
                 Box({
                     vertical: true,
-                    className: 'spacing-v-5 transparent-bg',
+                    css: 'background-color: transparent !important;',
+                    className: 'spacing-v-5',
                     children: [
                         timeRow,
                         togglesBox,
                     ]
                 }),
                 Box({
-                    className: 'sidebar-group transparent-bg',
+                    css: 'background-color: transparent !important;',
+                    className: 'sidebar-group',
                     children: [
                         sidebarOptionsStack,
                     ],

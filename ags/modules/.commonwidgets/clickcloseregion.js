@@ -10,6 +10,7 @@ export const clickCloseRegion = ({ name, multimonitor = true, monitor = 0, expan
             css: `
                 min-width: ${fillMonitor.includes('h') ? monitors[monitor].width : 0}px;
                 min-height: ${fillMonitor.includes('v') ? monitors[monitor].height : 0}px;
+                background-color: transparent !important;
             `,
         }),
         setup: (self) => self.on('button-press-event', (self, event) => { // Any mouse button
@@ -20,4 +21,3 @@ export const clickCloseRegion = ({ name, multimonitor = true, monitor = 0, expan
 }
 
 export default clickCloseRegion;
-

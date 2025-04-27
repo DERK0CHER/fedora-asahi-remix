@@ -67,7 +67,7 @@ const NotificationIcon = (notifObject) => {
         return Box({
             valign: Gtk.Align.CENTER,
             hexpand: false,
-            className: 'notif-icon',
+            className: 'notif-icon transparent-bg',
             css: `
                 background-image: url("${imagePath}");
                 background-size: auto 100%;
@@ -81,7 +81,7 @@ const NotificationIcon = (notifObject) => {
         return Box({
             valign: Gtk.Align.CENTER,
             hexpand: false,
-            className: 'notif-icon',
+            className: 'notif-icon transparent-bg',
             css: `
                 background-image: url("${notifObject.image}");
                 background-size: auto 100%;
@@ -100,7 +100,7 @@ const NotificationIcon = (notifObject) => {
     return Box({
         vpack: 'center',
         hexpand: false,
-        className: `notif-icon notif-icon-material-${notifObject.urgency}`,
+        className: `notif-icon notif-icon-material-${notifObject.urgency} transparent-bg`,
         homogeneous: true,
         children: [
             (icon != 'NO_ICON' ?
@@ -194,6 +194,7 @@ export default ({
         transition: 'slide_down',
         transitionDuration: userOptions.animations.durationLarge,
         child: Box({ // Box to make sure css-based spacing works
+            className: 'transparent-bg',
             homogeneous: true,
         }),
     });
@@ -220,7 +221,7 @@ export default ({
         revealChild: false,
         child: Box({
             vertical: true,
-            className: 'spacing-v-10',
+            className: 'spacing-v-10 transparent-bg',
             children: [
                 Label({
                     xalign: 0,
@@ -233,11 +234,11 @@ export default ({
                     label: processNotificationBody(notifObject.body, notifObject.appEntry)
                 }),
                 Box({
-                    className: 'notif-actions spacing-h-5',
+                    className: 'notif-actions spacing-h-5 transparent-bg',
                     children: [
                         Button({
                             hexpand: true,
-                            className: `notif-action notif-action-${notifObject.urgency}`,
+                            className: `notif-action notif-action-${notifObject.urgency} transparent-bg`,
                             onClicked: () => destroyWithAnims(),
                             setup: setupCursorHover,
                             child: Label({
@@ -246,7 +247,7 @@ export default ({
                         }),
                         ...notifObject.actions.map(action => Widget.Button({
                             hexpand: true,
-                            className: `notif-action notif-action-${notifObject.urgency}`,
+                            className: `notif-action notif-action-${notifObject.urgency} transparent-bg`,
                             onClicked: () => notifObject.invoke(action.id),
                             setup: setupCursorHover,
                             child: Label({
@@ -260,6 +261,7 @@ export default ({
     });
     const notifIcon = Box({
         vpack: 'start',
+        className: 'transparent-bg',
         homogeneous: true,
         children: [
             Overlay({
@@ -303,9 +305,11 @@ export default ({
     const notifText = Box({
         valign: Gtk.Align.CENTER,
         vertical: true,
+        className: 'transparent-bg',
         hexpand: true,
         children: [
             Box({
+                className: 'transparent-bg',
                 children: [
                     notifTextSummary,
                     notifTextBody,
@@ -317,7 +321,7 @@ export default ({
     });
     const notifExpandButton = Button({
         vpack: 'start',
-        className: 'notif-expand-btn',
+        className: 'notif-expand-btn transparent-bg',
         onClicked: (self) => {
             if (notifTextPreview.revealChild) { // Expanding...
                 notifTextPreview.revealChild = false;
@@ -339,11 +343,11 @@ export default ({
     });
     const notificationContent = Box({
         ...props,
-        className: `${isPopup ? 'popup-' : ''}notif-${notifObject.urgency} spacing-h-10`,
+        className: `${isPopup ? 'popup-' : ''}notif-${notifObject.urgency} spacing-h-10 transparent-bg`,
         children: [
             notifIcon,
             Box({
-                className: 'spacing-h-5',
+                className: 'spacing-h-5 transparent-bg',
                 children: [
                     notifText,
                     notifExpandButton,
@@ -388,6 +392,7 @@ export default ({
             'ready': false,
         },
         homogeneous: true,
+        className: 'transparent-bg',
         children: [notificationContent],
         setup: (self) => self
             .hook(gesture, self => {

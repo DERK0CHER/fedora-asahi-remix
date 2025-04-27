@@ -47,29 +47,29 @@ if (!fileExists(GLASS_STYLE_PATH)) {
 .session-bg,
 .session-button,
 .sidebar-todo-item,
-.sidebar-calendar-btn {
-    background-color: rgba(255, 255, 255, 0.4) !important; /* 60% translucent */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+.sidebar-calendar-btn,
+.indicator,
+.corner,
+.corner-black,
+.dock-bg,
+.osd-color,
+.system-menu,
+.menu {
+    background-color: rgba(0, 0, 0, 0) !important; /* Fully transparent */
+    box-shadow: none !important;
     backdrop-filter: blur(10px) !important;
     -gtk-icon-shadow: none !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: none !important;
 }
 
-/* Dark theme version */
+/* Dark theme version elements that need special handling */
 .bar-bg-focus,
 .osd-bg,
 .osd-window {
-    background-color: rgba(0, 0, 0, 0.4) !important; /* 60% translucent */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+    background-color: rgba(0, 0, 0, 0) !important; /* Fully transparent */
+    box-shadow: none !important;
     backdrop-filter: blur(10px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Make all icons black */
-.icon,
-.icon-material,
-.symbolic-icon {
-    color: black !important;
+    border: none !important;
 }
 
 /* Remove backgrounds from icon containers */
@@ -97,7 +97,9 @@ if (!fileExists(GLASS_STYLE_PATH)) {
 .sidebar-group,
 .sidebar-group-invisible-morehorizpad,
 .sidebar-navrail,
-.sidebar-icontabswitcher {
+.sidebar-icontabswitcher,
+.sidebar-icon-actions,
+* {
     background-color: transparent !important;
 }`, GLASS_STYLE_PATH);
 }
@@ -105,6 +107,34 @@ if (!fileExists(GLASS_STYLE_PATH)) {
 // Load the glass effect stylesheet
 App.connect('config-parsed', () => {
     App.applyCss(GLASS_STYLE_PATH);
+    
+    // Add additional global transparency styles
+    App.applyCss(`
+        /* Global transparency styles */
+        * {
+            background-color: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+        }
+        
+        .bar-group-standalone,
+        .overview-search-result-btn,
+        .osd-music,
+        .sidebar-left,
+        .sidebar-right,
+        .panel {
+            background-color: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+        }
+        
+        /* Keep icons visible */
+        .icon,
+        .icon-material,
+        .symbolic-icon {
+            color: inherit !important;
+        }
+    `);
 });
 
 export const getDistroIcon = () => {

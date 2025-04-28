@@ -2,6 +2,7 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { execAsync, exec } = Utils;
 const { Box, EventBox } = Widget;
+
 import {
     ToggleIconBluetooth,
     ToggleIconWifi,
@@ -16,6 +17,7 @@ import {
     ModuleGameMode,
     ModuleCloudflareWarp
 } from "./quicktoggles.js";
+
 import ModuleNotificationList from "./centermodules/notificationlist.js";
 import ModuleAudioControls from "./centermodules/audiocontrols.js";
 import ModuleWifiNetworks from "./centermodules/wifinetworks.js";
@@ -27,6 +29,7 @@ import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { ExpandingIconTabContainer } from '../.commonwidgets/tabcontainer.js';
 import { checkKeybind } from '../.widgetutils/keybind.js';
 
+// Define quick toggles
 const QUICK_TOGGLES = {
     'wifi': ToggleIconWifi(),
     'bluetooth': ToggleIconBluetooth(),
@@ -37,8 +40,9 @@ const QUICK_TOGGLES = {
     'gamemode': await ModuleGameMode(),
     'idleinhibitor': ModuleIdleInhibitor(),
     'cloudflarewarp': await ModuleCloudflareWarp(),
-}
+};
 
+// Define center widgets
 const centerWidgets = [
     {
         name: getString('Notifications'),
@@ -68,6 +72,7 @@ const centerWidgets = [
     },
 ];
 
+// Uptime bar
 const timeRow = Box({
     className: 'spacing-h-10 sidebar-group-invisible-morehorizpad',
     children: [
@@ -94,13 +99,8 @@ const timeRow = Box({
                                 const minutes = matches[5] ? parseInt(matches[5]) : 0;
 
                                 let formattedUptime = '';
-
-                                if (days > 0) {
-                                    formattedUptime += `${days} d `;
-                                }
-                                if (hours > 0) {
-                                    formattedUptime += `${hours} h `;
-                                }
+                                if (days > 0) formattedUptime += `${days} d `;
+                                if (hours > 0) formattedUptime += `${hours} h `;
                                 formattedUptime += `${minutes} m`;
 
                                 return formattedUptime;
@@ -113,8 +113,7 @@ const timeRow = Box({
 
                 self.poll(5000, label => {
                     getUptime().then(upTimeString => {
-                        label.label = `${getString("Uptime:"
-                        )} ${upTimeString}`;
+                        label.label = `${getString('Uptime:')} ${upTimeString}`;
                     }).catch(err => {
                         console.error(`Failed to fetch uptime: ${err}`);
                     });
@@ -123,32 +122,36 @@ const timeRow = Box({
         }),
         Widget.Box({ hexpand: true }),
         ModuleReloadIcon({ hpack: 'end' }),
-        // ModuleSettingsIcon({ hpack: 'end' }), // Button does work, gnome-control-center is kinda broken
+        //ModuleSettingsIcon({ hpack: 'end' }),
         ModulePowerIcon({ hpack: 'end' }),
-    ]
+    ],
 });
 
-const togglesBox = Widget.Box({
+// Quick toggles box
+const togglesBox = Box({
     hpack: 'center',
     className: 'sidebar-togglesbox spacing-h-5',
     children: userOptions.sidebar.quickToggles.order.map(toggle => QUICK_TOGGLES[toggle])
-})
+});
 
+// Sidebar options stack
 export const sidebarOptionsStack = ExpandingIconTabContainer({
     tabsHpack: 'center',
     tabSwitcherClassName: 'sidebar-icontabswitcher',
-    icons: centerWidgets.map((api) => api.materialIcon),
-    names: centerWidgets.map((api) => api.name),
-    children: centerWidgets.map((api) => api.contentWidget()),
+    icons: centerWidgets.map(api => api.materialIcon),
+    names: centerWidgets.map(api => api.name),
+    children: centerWidgets.map(api => api.contentWidget()),
     onChange: (self, id) => {
         self.shown = centerWidgets[id].name;
         if (centerWidgets[id].onFocus) centerWidgets[id].onFocus();
     }
 });
 
+// Export sidebar
 export default () => Box({
     vexpand: true,
     hexpand: true,
+    className: 'side',    // ← ADDED THIS LINE FOR TRANSPARENT BACKGROUND
     css: 'min-width: 2px;',
     children: [
         EventBox({
@@ -180,13 +183,11 @@ export default () => Box({
         }),
     ],
     setup: (self) => self
-        .on('key-press-event', (widget, event) => { // Handle keybinds
+        .on('key-press-event', (widget, event) => {
             if (checkKeybind(event, userOptions.keybinds.sidebar.options.nextTab)) {
                 sidebarOptionsStack.nextTab();
-            }
-            else if (checkKeybind(event, userOptions.keybinds.sidebar.options.prevTab)) {
+            } else if (checkKeybind(event, userOptions.keybinds.sidebar.options.prevTab)) {
                 sidebarOptionsStack.prevTab();
             }
-        })
-    ,
+        }),
 });

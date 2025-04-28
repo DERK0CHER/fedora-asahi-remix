@@ -24,10 +24,10 @@ const SessionButton = (name, icon, command, props = {}, colorid = 0) => {
         className: `session-button session-color-${colorid}`,
         child: Widget.Overlay({
             className: 'session-button-box',
-            child: Widget.Label({
+            child: Widget.Icon({
                 vexpand: true,
-                className: 'icon-material',
-                label: icon,
+                icon: `${icon}-symbolic`,
+                className: 'txt-large'
             }),
             overlays: [
                 buttonDescription,
@@ -61,14 +61,14 @@ const SessionButton = (name, icon, command, props = {}, colorid = 0) => {
 
 export default ({ id = 0 }) => {
     // lock, logout, sleep
-    const lockButton = SessionButton(getString('Lock'), 'lock', () => { closeWindowOnAllMonitors('session'); execAsync(['loginctl', 'lock-session']).catch(print) }, {}, 1);
-    const logoutButton = SessionButton(getString('Logout'), 'logout', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'pkill Hyprland || pkill sway || pkill niri || loginctl terminate-user $USER']).catch(print) }, {}, 2);
-    const sleepButton = SessionButton(getString('Sleep'), 'sleep', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl suspend || loginctl suspend']).catch(print) }, {}, 3);
+    const lockButton = SessionButton(getString('Lock'), 'system-lock-screen', () => { closeWindowOnAllMonitors('session'); execAsync(['loginctl', 'lock-session']).catch(print) }, {}, 1);
+    const logoutButton = SessionButton(getString('Logout'), 'system-log-out', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'pkill Hyprland || pkill sway || pkill niri || loginctl terminate-user $USER']).catch(print) }, {}, 2);
+    const sleepButton = SessionButton(getString('Sleep'), 'system-suspend', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl suspend || loginctl suspend']).catch(print) }, {}, 3);
     // hibernate, shutdown, reboot
-    const hibernateButton = SessionButton(getString('Hibernate'), 'downloading', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl hibernate || loginctl hibernate']).catch(print) }, {}, 4);
-    const shutdownButton = SessionButton(getString('Shutdown'), 'power_settings_new', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl poweroff || loginctl poweroff']).catch(print) }, {}, 5);
-    const rebootButton = SessionButton(getString('Reboot'), 'restart_alt', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl reboot || loginctl reboot']).catch(print) }, {}, 6);
-    const cancelButton = SessionButton(getString('Cancel'), 'close', () => closeWindowOnAllMonitors('session'), { className: 'session-button-cancel' }, 7);
+    const hibernateButton = SessionButton(getString('Hibernate'), 'system-suspend-hibernate', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl hibernate || loginctl hibernate']).catch(print) }, {}, 4);
+    const shutdownButton = SessionButton(getString('Shutdown'), 'system-shutdown', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl poweroff || loginctl poweroff']).catch(print) }, {}, 5);
+    const rebootButton = SessionButton(getString('Reboot'), 'system-reboot', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl reboot || loginctl reboot']).catch(print) }, {}, 6);
+    const cancelButton = SessionButton(getString('Cancel'), 'window-close', () => closeWindowOnAllMonitors('session'), { className: 'session-button-cancel' }, 7);
 
     const sessionDescription = Widget.Box({
         vertical: true,

@@ -1,14 +1,15 @@
 // This is for the right pills of the bar.
+import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Label, Button, Overlay, Revealer, Scrollable, Stack, EventBox } = Widget;
 const { exec, execAsync } = Utils;
 const { GLib } = imports.gi;
 import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
-import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { AnimatedCircProg } from "../../.commonwidgets/cairo_circularprogress.js";
 import { WWO_CODE, WEATHER_SYMBOL, NIGHT_WEATHER_SYMBOL } from '../../.commondata/weather.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
+import { substitute } from '../../.miscutils/icons.js';
 
 const WEATHER_CACHE_FOLDER = `${GLib.get_user_cache_dir()}/ags/weather`;
 Utils.exec(`mkdir -p ${WEATHER_CACHE_FOLDER}`);
@@ -66,8 +67,11 @@ const UtilButton = ({ name, icon, onClicked }) => Button({
     vpack: 'center',
     tooltipText: name,
     onClicked: onClicked,
-    className: `bar-util-btn ${userOptions.appearance.borderless ? 'bar-util-btn-borderless' : ''} icon-material txt-norm`,
-    label: `${icon}`,
+    className: `bar-util-btn ${userOptions.appearance.borderless ? 'bar-util-btn-borderless' : ''}`,
+    child: Widget.Icon({
+        icon: substitute(icon),
+        className: 'txt-norm'
+    }),
     setup: setupCursorHover
 })
 
@@ -76,18 +80,24 @@ const Utilities = () => Box({
     className: 'spacing-h-4',
     children: [
         UtilButton({
-            name: getString('Screen snip'), icon: 'screenshot_region', onClicked: () => {
+            name: getString('Screen snip'), 
+            icon: 'applets-screenshooter', 
+            onClicked: () => {
                 Utils.execAsync(`${App.configDir}/scripts/grimblast.sh copy area`)
                     .catch(print)
             }
         }),
         UtilButton({
-            name: getString('Color picker'), icon: 'colorize', onClicked: () => {
+            name: getString('Color picker'), 
+            icon: 'color-select', 
+            onClicked: () => {
                 Utils.execAsync(['hyprpicker', '-a']).catch(print)
             }
         }),
         UtilButton({
-            name: getString('Toggle on-screen keyboard'), icon: 'keyboard', onClicked: () => {
+            name: getString('Toggle on-screen keyboard'), 
+            icon: 'input-keyboard', 
+            onClicked: () => {
                 toggleWindowOnAllMonitors('osk');
             }
         }),
@@ -101,7 +111,11 @@ const BarBattery = () => Box({
             transitionDuration: userOptions.animations.durationSmall,
             revealChild: false,
             transition: 'slide_right',
-            child: MaterialIcon('bolt', 'norm', { tooltipText: "Charging" }),
+            child: Widget.Icon({
+                icon: 'battery-charging-symbolic',
+                tooltipText: "Charging",
+                className: 'txt-norm'
+            }),
             setup: (self) => self.hook(Battery, revealer => {
                 self.revealChild = Battery.charging;
             }),
@@ -118,7 +132,10 @@ const BarBattery = () => Box({
                 className: 'bar-batt',
                 homogeneous: true,
                 children: [
-                    MaterialIcon('battery_full', 'small'),
+                    Widget.Icon({
+                        icon: 'battery-symbolic',
+                        className: 'txt-small'
+                    }),
                 ],
                 setup: (self) => self.hook(Battery, box => {
                     box.toggleClassName('bar-batt-low', Battery.percent <= userOptions.battery.low);
@@ -157,7 +174,10 @@ const BatteryModule = () => Stack({
                 hpack: 'center',
                 className: 'spacing-h-4 txt-onSurfaceVariant',
                 children: [
-                    MaterialIcon('device_thermostat', 'small'),
+                    Widget.Icon({
+                        icon: 'weather-symbolic',
+                        className: 'txt-small'
+                    }),
                     Label({
                         label: 'Weather',
                     })
@@ -174,7 +194,7 @@ const BatteryModule = () => Stack({
                             const temperature = weather.current_condition[0][`temp_${userOptions.weather.preferredUnit}`];
                             const feelsLike = weather.current_condition[0][`FeelsLike${userOptions.weather.preferredUnit}`];
                             const weatherSymbol = WEATHER_SYMBOL[WWO_CODE[weatherCode]];
-                            self.children[0].label = weatherSymbol;
+                            self.children[0].icon = 'weather-' + WWO_CODE[weatherCode].toLowerCase() + '-symbolic';
                             self.children[1].label = `${temperature}°${userOptions.weather.preferredUnit} • ${getString('Feels like')} ${feelsLike}°${userOptions.weather.preferredUnit}`;
                             self.tooltipText = weatherDesc;
                         }).catch((err) => {
@@ -187,7 +207,7 @@ const BatteryModule = () => Stack({
                                 const temperature = weather.current_condition[0][`temp_${userOptions.weather.preferredUnit}`];
                                 const feelsLike = weather.current_condition[0][`FeelsLike${userOptions.weather.preferredUnit}`];
                                 const weatherSymbol = WEATHER_SYMBOL[WWO_CODE[weatherCode]];
-                                self.children[0].label = weatherSymbol;
+                                self.children[0].icon = 'weather-' + WWO_CODE[weatherCode].toLowerCase() + '-symbolic';
                                 self.children[1].label = `${temperature}°${userOptions.weather.preferredUnit} • ${getString('Feels like')} ${feelsLike}°${userOptions.weather.preferredUnit}`;
                                 self.tooltipText = weatherDesc;
                             } catch (err) {

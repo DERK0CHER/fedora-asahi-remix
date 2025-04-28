@@ -5,8 +5,8 @@ import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
 const { Box, Button, EventBox, Label, Overlay, Revealer, Scrollable } = Widget;
 const { execAsync, exec } = Utils;
 import { AnimatedCircProg } from "../../.commonwidgets/cairo_circularprogress.js";
-import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { showMusicControls } from '../../../variables.js';
+import { substitute } from '../../.miscutils/icons.js';
 
 const CUSTOM_MODULE_CONTENT_INTERVAL_FILE = `${GLib.get_user_cache_dir()}/ags/user/scripts/custom-module-interval.txt`;
 const CUSTOM_MODULE_CONTENT_SCRIPT = `${GLib.get_user_cache_dir()}/ags/user/scripts/custom-module-poll.sh`;
@@ -19,7 +19,7 @@ const CUSTOM_MODULE_SCROLLDOWN_SCRIPT = `${GLib.get_user_cache_dir()}/ags/user/s
 function trimTrackTitle(title) {
     if (!title) return '';
     const cleanPatterns = [
-        /【[^】]*】/,        // Touhou n weeb stuff
+        /【[^】]*】/,         // Touhou n weeb stuff
         " [FREE DOWNLOAD]", // F-777
     ];
     cleanPatterns.forEach((expr) => title = title.replace(expr, ''));
@@ -31,7 +31,6 @@ function adjustVolume(direction) {
     const mpris = Mpris.getPlayer('');
     mpris.volume += (direction === 'up') ? step : -step
 }
-
 
 const BarGroup = ({ child }) => Box({
     className: 'bar-group-margin bar-sides',
@@ -57,7 +56,10 @@ const BarResource = (name, icon, command, circprogClassName = `bar-batt-circprog
                 className: `${iconClassName}`,
                 homogeneous: true,
                 children: [
-                    MaterialIcon(icon, 'small'),
+                    Widget.Icon({
+                        icon: substitute(icon),
+                        className: 'txt-small'
+                    }),
                 ],
             }),
             overlays: [resourceCircProg]
@@ -113,8 +115,6 @@ const switchToRelativeWorkspace = async (self, num) => {
     }
 }
 
-
-
 export default () => {
     // TODO: use cairo to make button bounce smaller on click, if that's possible
     const playingState = Box({ // Wrap a box cuz overlay can't have margins itself
@@ -124,13 +124,12 @@ export default () => {
                 vpack: 'center',
                 className: 'bar-music-playstate',
                 homogeneous: true,
-                children: [Label({
+                children: [Widget.Icon({
                     vpack: 'center',
                     className: 'bar-music-playstate-txt',
-                    justification: 'center',
-                    setup: (self) => self.hook(Mpris, label => {
+                    setup: (self) => self.hook(Mpris, icon => {
                         const mpris = Mpris.getPlayer('');
-                        label.label = `${mpris !== null && mpris.playBackStatus == 'Playing' ? 'pause' : 'play_arrow'}`;
+                        icon.icon = `${mpris !== null && mpris.playBackStatus == 'Playing' ? 'media-playback-pause-symbolic' : 'media-playback-start-symbolic'}`;
                     }),
                 })],
                 setup: (self) => self.hook(Mpris, label => {
@@ -193,7 +192,7 @@ export default () => {
         } else return BarGroup({
             child: Box({
                 children: [
-                    BarResource(getString('RAM Usage'), 'memory', `LANG=C free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`,
+                    BarResource(getString('RAM Usage'), 'drive-harddisk', `LANG=C free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`,
                         `bar-ram-circprog ${userOptions.appearance.borderless ? 'bar-ram-circprog-borderless' : ''}`, 'bar-ram-txt', 'bar-ram-icon'),
                     Revealer({
                         revealChild: true,
@@ -202,9 +201,9 @@ export default () => {
                         child: Box({
                             className: 'spacing-h-10 margin-left-10',
                             children: [
-                                BarResource(getString('Swap Usage'), 'swap_horiz', `LANG=C free | awk '/^Swap/ {if ($2 > 0) printf("%.2f\\n", ($3/$2) * 100); else print "0";}'`,
+                                BarResource(getString('Swap Usage'), 'view-refresh', `LANG=C free | awk '/^Swap/ {if ($2 > 0) printf("%.2f\\n", ($3/$2) * 100); else print "0";}'`,
                                     `bar-swap-circprog ${userOptions.appearance.borderless ? 'bar-swap-circprog-borderless' : ''}`, 'bar-swap-txt', 'bar-swap-icon'),
-                                BarResource(getString('CPU Usage'), 'settings_motion_mode', `LANG=C top -bn1 | grep Cpu | sed 's/\\,/\\./g' | awk '{print $2}'`,
+                                BarResource(getString('CPU Usage'), 'preferences-system', `LANG=C top -bn1 | grep Cpu | sed 's/\\,/\\./g' | awk '{print $2}'`,
                                     `bar-cpu-circprog ${userOptions.appearance.borderless ? 'bar-cpu-circprog-borderless' : ''}`, 'bar-cpu-txt', 'bar-cpu-icon'),
                             ]
                         }),

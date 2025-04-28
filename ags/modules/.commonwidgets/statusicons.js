@@ -25,11 +25,6 @@ function isLanguageMatch(abbreviation, word) {
     return false;
 }
 
-// Helper function for Adwaita icon paths
-function getAdwaitaIconPath(iconName) {
-    return `/assets/icons/${iconName}.svg`;
-}
-
 export const MicMuteIndicator = () => Widget.Revealer({
     transition: 'slide_left',
     transitionDuration: userOptions.animations.durationSmall,
@@ -38,7 +33,8 @@ export const MicMuteIndicator = () => Widget.Revealer({
         self.revealChild = Audio.microphone?.stream?.isMuted;
     }),
     child: Widget.Icon({
-        icon: getAdwaitaIconPath('microphone-disabled-symbolic'),
+        icon: 'microphone-disabled-symbolic',
+        className: 'txt-norm'
     }),
 });
 
@@ -62,7 +58,8 @@ export const NotificationIndicator = (notifCenterName = 'sideright') => {
         child: Widget.Box({
             children: [
                 Widget.Icon({
-                    icon: getAdwaitaIconPath('notification-symbolic'),
+                    icon: 'notification-symbolic',
+                    className: 'txt-norm'
                 }),
                 Widget.Label({
                     className: 'txt-small titlefont',
@@ -95,9 +92,9 @@ export const BluetoothIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
     transitionDuration: userOptions.animations.durationSmall,
     children: {
-        'disabled': Widget.Icon({ icon: getAdwaitaIconPath('bluetooth-disabled-symbolic') }),
-        'enabled': Widget.Icon({ icon: getAdwaitaIconPath('bluetooth-symbolic') }),
-        'connected': Widget.Icon({ icon: getAdwaitaIconPath('bluetooth-active-symbolic') }),
+        'disabled': Widget.Icon({ className: 'txt-norm', icon: 'bluetooth-disabled-symbolic' }),
+        'enabled': Widget.Icon({ className: 'txt-norm', icon: 'bluetooth-symbolic' }),
+        'connected': Widget.Icon({ className: 'txt-norm', icon: 'bluetooth-active-symbolic' }),
     },
     setup: (self) =>
         self.hook(Bluetooth, (stack) => {
@@ -120,7 +117,9 @@ const BluetoothDevices = () => Widget.Box({
                 vpack: 'center',
                 tooltipText: device.name,
                 children: [
-                    Widget.Icon(`${device.iconName}-symbolic`),
+                    Widget.Icon({
+                        icon: `${device.iconName}-symbolic`
+                    }),
                     ...(device.batteryPercentage ? [Widget.Label({
                         className: 'txt-smallie',
                         label: `${device.batteryPercentage}`,
@@ -142,10 +141,10 @@ const NetworkWiredIndicator = () => Widget.Stack({
     transitionDuration: userOptions.animations.durationSmall,
     children: {
         'fallback': SimpleNetworkIndicator(),
-        'unknown': Widget.Icon({ icon: getAdwaitaIconPath('network-wired-no-route-symbolic') }),
-        'disconnected': Widget.Icon({ icon: getAdwaitaIconPath('network-wired-disconnected-symbolic') }),
-        'connected': Widget.Icon({ icon: getAdwaitaIconPath('network-wired-symbolic') }),
-        'connecting': Widget.Icon({ icon: getAdwaitaIconPath('network-wired-acquiring-symbolic') }),
+        'unknown': Widget.Icon({ className: 'txt-norm', icon: 'network-wired-disconnected-symbolic' }),
+        'disconnected': Widget.Icon({ className: 'txt-norm', icon: 'network-wired-disconnected-symbolic' }),
+        'connected': Widget.Icon({ className: 'txt-norm', icon: 'network-wired-symbolic' }),
+        'connecting': Widget.Icon({ className: 'txt-norm', icon: 'network-wired-acquiring-symbolic' }),
     },
     setup: (self) => self.hook(Network, stack => {
         if (!Network.wired)
@@ -173,14 +172,14 @@ const NetworkWifiIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
     transitionDuration: userOptions.animations.durationSmall,
     children: {
-        'disabled': Widget.Icon({ icon: getAdwaitaIconPath('network-wireless-disabled-symbolic') }),
-        'disconnected': Widget.Icon({ icon: getAdwaitaIconPath('network-wireless-offline-symbolic') }),
-        'connecting': Widget.Icon({ icon: getAdwaitaIconPath('network-wireless-acquiring-symbolic') }),
-        '0': Widget.Icon({ icon: getAdwaitaIconPath('network-wireless-signal-none-symbolic') }),
-        '1': Widget.Icon({ icon: getAdwaitaIconPath('network-wireless-signal-weak-symbolic') }),
-        '2': Widget.Icon({ icon: getAdwaitaIconPath('network-wireless-signal-ok-symbolic') }),
-        '3': Widget.Icon({ icon: getAdwaitaIconPath('network-wireless-signal-good-symbolic') }),
-        '4': Widget.Icon({ icon: getAdwaitaIconPath('network-wireless-signal-excellent-symbolic') }),
+        'disabled': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-disabled-symbolic' }),
+        'disconnected': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-disconnected-symbolic' }),
+        'connecting': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-acquiring-symbolic' }),
+        '0': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-signal-none-symbolic' }),
+        '1': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-signal-weak-symbolic' }),
+        '2': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-signal-ok-symbolic' }),
+        '3': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-signal-good-symbolic' }),
+        '4': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-signal-excellent-symbolic' }),
     },
     setup: (self) => self.hook(Network, (stack) => {
         if (!Network.wifi) {
@@ -231,7 +230,6 @@ const HyprlandXkbKeyboardLayout = async ({ useFlag } = {}) => {
             initLangs = [...new Set(initLangs)];
             languageStackArray = Array.from({ length: initLangs.length }, (_, i) => {
                 const lang = languages.find(lang => lang.layout == initLangs[i]);
-                // Object
                 if (!lang) return {
                     [initLangs[i]]: Widget.Label({ label: initLangs[i] })
                 };

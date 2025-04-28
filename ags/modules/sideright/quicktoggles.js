@@ -8,7 +8,6 @@ import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 const { execAsync, exec } = Utils;
 import { BluetoothIndicator, NetworkIndicator } from '../.commonwidgets/statusicons.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
-import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { sidebarOptionsStack } from './sideright.js';
 
 export const ToggleIconWifi = (props = {}) => Widget.Button({
@@ -67,7 +66,11 @@ export const HyprToggleIcon = async (icon, name, hyprlandConfigValue, props = {}
                     button.toggleClassName('sidebar-button-active', currentOption == 0);
                 }).catch(print);
             },
-            child: MaterialIcon(icon, 'norm', { hpack: 'center' }),
+            child: Widget.Icon({
+                icon: substitute(icon),
+                hpack: 'center',
+                className: 'txt-norm'
+            }),
             setup: button => {
                 button.toggleClassName('sidebar-button-active', JSON.parse(Utils.exec(`hyprctl -j getoption ${hyprlandConfigValue}`)).int == 1);
                 setupCursorHover(button);
@@ -105,7 +108,10 @@ export const ModuleNightLight = async (props = {}) => {
                 })
                 .catch(print);
         },
-        child: MaterialIcon('nightlight', 'norm'),
+        child: Widget.Icon({
+            icon: 'night-light-symbolic',
+            className: 'txt-norm'
+        }),
         setup: (self) => {
             setupCursorHover(self);
             self.attribute.enabled = !!exec('pidof gammastep');
@@ -149,7 +155,6 @@ export const ModuleInvertColors = async (props = {}) => {
             className: 'txt-small sidebar-iconbutton',
             tooltipText: getString('Color inversion'),
             onClicked: (button) => {
-                // const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
                 Hyprland.messageAsync('j/getoption decoration:screen_shader')
                     .then((output) => {
                         const shaderPath = JSON.parse(output)["str"].trim();
@@ -164,7 +169,10 @@ export const ModuleInvertColors = async (props = {}) => {
                         }
                     })
             },
-            child: MaterialIcon('invert_colors', 'norm'),
+            child: Widget.Icon({
+                icon: 'invert-colors-symbolic',
+                className: 'txt-norm'
+            }),
             setup: setupCursorHover,
             ...props,
         })
@@ -194,7 +202,10 @@ export const ModuleRawInput = async (props = {}) => {
                         }
                     })
             },
-            child: MaterialIcon('mouse', 'norm'),
+            child: Widget.Icon({
+                icon: 'input-mouse-symbolic',
+                className: 'txt-norm'
+            }),
             setup: setupCursorHover,
             ...props,
         })
@@ -223,7 +234,10 @@ export const ModuleGameMode = async (props = {}) => {
                         button.toggleClassName('sidebar-button-active', enabled);
                     })
             },
-            child: MaterialIcon('gamepad', 'norm'),
+            child: Widget.Icon({
+                icon: 'applications-games-symbolic',
+                className: 'txt-norm'
+            }),
             setup: setupCursorHover,
             ...props,
         })
@@ -244,7 +258,10 @@ export const ModuleIdleInhibitor = (props = {}) => Widget.Button({ // TODO: Make
         if (self.attribute.enabled) Utils.execAsync(['bash', '-c', `pidof wayland-idle-inhibitor.py || ${App.configDir}/scripts/wayland-idle-inhibitor.py`]).catch(print)
         else Utils.execAsync('pkill -f wayland-idle-inhibitor.py').catch(print);
     },
-    child: MaterialIcon('coffee', 'norm'),
+    child: Widget.Icon({
+        icon: 'caffeine-symbolic',
+        className: 'txt-norm'
+    }),
     setup: (self) => {
         setupCursorHover(self);
         self.attribute.enabled = !!exec('pidof wayland-idle-inhibitor.py');
@@ -261,7 +278,10 @@ export const ModuleReloadIcon = (props = {}) => Widget.Button({
         execAsync(['bash', '-c', 'hyprctl reload || swaymsg reload &']);
         App.closeWindow('sideright');
     },
-    child: MaterialIcon('refresh', 'norm'),
+    child: Widget.Icon({
+        icon: 'view-refresh-symbolic',
+        className: 'txt-norm'
+    }),
     setup: button => {
         setupCursorHover(button);
     }
@@ -275,7 +295,10 @@ export const ModuleSettingsIcon = (props = {}) => Widget.Button({
         execAsync(['bash', '-c', `${userOptions.apps.settings}`, '&']);
         App.closeWindow('sideright');
     },
-    child: MaterialIcon('settings', 'norm'),
+    child: Widget.Icon({
+        icon: 'preferences-system-symbolic',
+        className: 'txt-norm'
+    }),
     setup: button => {
         setupCursorHover(button);
     }
@@ -289,7 +312,10 @@ export const ModulePowerIcon = (props = {}) => Widget.Button({
         closeEverything();
         Utils.timeout(1, () => openWindowOnAllMonitors('session'));
     },
-    child: MaterialIcon('power_settings_new', 'norm'),
+    child: Widget.Icon({
+        icon: 'system-shutdown-symbolic',
+        className: 'txt-norm'
+    }),
     setup: button => {
         setupCursorHover(button);
     }

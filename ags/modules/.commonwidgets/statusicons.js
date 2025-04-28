@@ -8,6 +8,7 @@ import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
 import { languages } from './statusicons_languages.js';
+import { substitute } from '../.miscutils/icons.js';
 
 // A guessing func to try to support langs not listed in data/languages.js
 function isLanguageMatch(abbreviation, word) {
@@ -118,7 +119,8 @@ const BluetoothDevices = () => Widget.Box({
                 tooltipText: device.name,
                 children: [
                     Widget.Icon({
-                        icon: `${device.iconName}-symbolic`
+                        // Use substitute to ensure symbolic icons
+                        icon: substitute(device.iconName)
                     }),
                     ...(device.batteryPercentage ? [Widget.Label({
                         className: 'txt-smallie',
@@ -163,8 +165,8 @@ const NetworkWiredIndicator = () => Widget.Stack({
 const SimpleNetworkIndicator = () => Widget.Icon({
     setup: (self) => self.hook(Network, self => {
         const icon = Network[Network.primary || 'wifi']?.iconName;
-        self.icon = icon || '';
-        self.visible = icon;
+        self.icon = icon ? substitute(icon) : '';
+        self.visible = !!icon;
     }),
 });
 
@@ -309,4 +311,4 @@ export const StatusIcons = (props = {}, monitor = 0) => Widget.Box({
             })
         ]
     })
-});
+})

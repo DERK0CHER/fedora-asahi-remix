@@ -61,7 +61,6 @@ const getFriendlyNotifTimeString = (timeObject) => {
 }
 
 const NotificationIcon = (notifObject) => {
-
     if (notifObject.hints?.image_path?.deepUnpack) {
         const imagePath = notifObject.hints.image_path.deepUnpack();
         return Box({
@@ -91,11 +90,11 @@ const NotificationIcon = (notifObject) => {
         });
     }
 
-    let icon = 'NO_ICON';
+    let icon = 'dialog-information-symbolic';
     if (Utils.lookUpIcon(notifObject.appIcon))
-        icon = notifObject.appIcon;
+        icon = substitute(notifObject.appIcon);
     if (Utils.lookUpIcon(notifObject.appEntry))
-        icon = notifObject.appEntry;
+        icon = substitute(notifObject.appEntry);
 
     return Box({
         vpack: 'center',
@@ -103,13 +102,16 @@ const NotificationIcon = (notifObject) => {
         className: `notif-icon notif-icon-material-${notifObject.urgency} transparent-bg`,
         homogeneous: true,
         children: [
-            (icon != 'NO_ICON' ?
+            (icon != 'dialog-information-symbolic' ?
                 Icon({
                     vpack: 'center',
                     icon: icon,
                 })
                 :
-                MaterialIcon(`${notifObject.urgency == 'critical' ? 'release_alert' : guessMessageType(notifObject.summary.toLowerCase())}`, 'hugerass', {
+                Icon({
+                    icon: notifObject.urgency == 'critical' ? 
+                        'dialog-error-symbolic' : 
+                        guessMessageType(notifObject.summary.toLowerCase()),
                     hexpand: true,
                 })
             )

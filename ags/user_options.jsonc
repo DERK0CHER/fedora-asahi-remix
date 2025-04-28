@@ -23,7 +23,7 @@
             }
         },
         "calendar": {
-            "expandByDefault": false
+            "expandByDefault": true
         }
     }
 }

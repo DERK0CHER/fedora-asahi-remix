@@ -6,22 +6,39 @@ export function iconExists(iconName) {
 }
 
 export function substitute(str) {
-    // First try exact symbolic name
-    const symbolicName = `${str}-symbolic`;
-    if (iconExists(symbolicName)) {
-        return symbolicName;
-    }
+    if (!str || str === "") return "image-missing-symbolic";
+
+    // Special case handling for specific icons
+    const specialIcons = {
+        'battery': 'battery-symbolic',
+        'spark': 'sparkle-symbolic',
+        'notifications': 'notification-symbolic',
+        'notifications_paused': 'notifications-disabled-symbolic',
+        'volume_up': 'audio-volume-high-symbolic',
+        'bluetooth': 'bluetooth-symbolic',
+        'wifi': 'network-wireless-symbolic',
+        'tune': 'preferences-system-symbolic'
+    };
     
-    // Then try adwaita symbolic version
+    if (specialIcons[str]) return specialIcons[str];
+
+    // First check if already has -symbolic suffix
+    if (str.endsWith('-symbolic') && iconExists(str)) 
+        return str;
+    
+    // Try direct symbolic version
+    const symbolicName = `${str}-symbolic`;
+    if (iconExists(symbolicName))
+        return symbolicName;
+    
+    // Try Adwaita symbolic version
     const adwaitaSymbolicName = `adwaita-${str}-symbolic`;
-    if (iconExists(adwaitaSymbolicName)) {
+    if (iconExists(adwaitaSymbolicName))
         return adwaitaSymbolicName;
-    }
     
     // Check for direct substitutions
     if (userOptions.icons.substitutions[str]) {
         const substitution = userOptions.icons.substitutions[str];
-        // Ensure substitution ends with -symbolic
         return substitution.endsWith('-symbolic') ? 
             substitution : `${substitution}-symbolic`;
     }
@@ -29,17 +46,23 @@ export function substitute(str) {
     // Try regex substitutions
     for (let i = 0; i < userOptions.icons.regexSubstitutions.length; i++) {
         const substitution = userOptions.icons.regexSubstitutions[i];
-        const replacedName = str.replace(
-            substitution.regex,
-            substitution.replace,
-        );
-        if (replacedName != str) {
+        const regex = new RegExp(substitution.regex);
+        const replacedName = str.replace(regex, substitution.replace);
+        if (replacedName !== str) {
             // Ensure result ends with -symbolic
             return replacedName.endsWith('-symbolic') ? 
                 replacedName : `${replacedName}-symbolic`;
         }
     }
 
-    // Last resort: Return with symbolic suffix
+    // Convert to kebab case as a last resort
+    const kebabCaseStr = str.toLowerCase().replace(/\s+/g, "-");
+    if (kebabCaseStr !== str) {
+        const kebabSymbolic = `${kebabCaseStr}-symbolic`;
+        if (iconExists(kebabSymbolic))
+            return kebabSymbolic;
+    }
+
+    // Fallback to original with symbolic suffix
     return `${str}-symbolic`;
 }

@@ -8,6 +8,7 @@ import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 const { execAsync, exec } = Utils;
 import { BluetoothIndicator, NetworkIndicator } from '../.commonwidgets/statusicons.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
+import { substitute } from '../.miscutils/icons.js';
 import { sidebarOptionsStack } from './sideright.js';
 
 export const ToggleIconWifi = (props = {}) => Widget.Button({
@@ -67,6 +68,7 @@ export const HyprToggleIcon = async (icon, name, hyprlandConfigValue, props = {}
                 }).catch(print);
             },
             child: Widget.Icon({
+                // Use substitute to ensure we get symbolic icons
                 icon: substitute(icon),
                 hpack: 'center',
                 className: 'txt-norm'
@@ -109,6 +111,7 @@ export const ModuleNightLight = async (props = {}) => {
                 .catch(print);
         },
         child: Widget.Icon({
+            // Use night-light-symbolic from Adwaita
             icon: 'night-light-symbolic',
             className: 'txt-norm'
         }),
@@ -136,7 +139,8 @@ export const ModuleCloudflareWarp = async (props = {}) => {
             else Utils.execAsync('warp-cli disconnect').catch(print);
         },
         child: Widget.Icon({
-            icon: 'cloudflare-dns-symbolic',
+            // Using network-vpn-symbolic for Cloudflare WARP
+            icon: 'network-vpn-symbolic',
             className: 'txt-norm',
         }),
         setup: (self) => {
@@ -170,7 +174,8 @@ export const ModuleInvertColors = async (props = {}) => {
                     })
             },
             child: Widget.Icon({
-                icon: 'invert-colors-symbolic',
+                // Using display-brightness-symbolic for invert colors
+                icon: 'display-brightness-symbolic',
                 className: 'txt-norm'
             }),
             setup: setupCursorHover,
@@ -203,6 +208,7 @@ export const ModuleRawInput = async (props = {}) => {
                     })
             },
             child: Widget.Icon({
+                // Using input-mouse-symbolic
                 icon: 'input-mouse-symbolic',
                 className: 'txt-norm'
             }),
@@ -235,6 +241,7 @@ export const ModuleGameMode = async (props = {}) => {
                     })
             },
             child: Widget.Icon({
+                // Using applications-games-symbolic for game mode
                 icon: 'applications-games-symbolic',
                 className: 'txt-norm'
             }),
@@ -259,7 +266,8 @@ export const ModuleIdleInhibitor = (props = {}) => Widget.Button({ // TODO: Make
         else Utils.execAsync('pkill -f wayland-idle-inhibitor.py').catch(print);
     },
     child: Widget.Icon({
-        icon: 'caffeine-symbolic',
+        // Using alarm-symbolic for idle inhibitor
+        icon: 'alarm-symbolic',
         className: 'txt-norm'
     }),
     setup: (self) => {

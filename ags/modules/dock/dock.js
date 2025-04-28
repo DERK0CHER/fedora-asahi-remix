@@ -42,32 +42,32 @@ const focus = ({ address }) => Utils.execAsync(`hyprctl dispatch focuswindow add
 
 const DockSeparator = (props = {}) => Box({
     ...props,
-    className: 'dock-separator',
+    className: 'dock-separator transparent-bg',
 });
 
 const PinButton = () => Widget.Button({
-    className: 'dock-app-btn dock-app-btn-animate',
+    className: 'dock-app-btn dock-app-btn-animate transparent-bg',
     tooltipText: 'Pin Dock',
     child: Widget.Box({
         homogeneous: true,
-        className: 'dock-app-icon',
+        className: 'dock-app-icon transparent-bg',
         child: Widget.Icon({
             icon: 'pin-symbolic', // Using Adwaita symbolic icon
         }),
     }),
     onClicked: (self) => {
         isPinned = !isPinned;
-        self.className = `${isPinned ? "pinned-dock-app-btn" : "dock-app-btn animate"} dock-app-btn-animate`;
+        self.className = `${isPinned ? "pinned-dock-app-btn" : "dock-app-btn animate"} dock-app-btn-animate transparent-bg`;
     },
     setup: setupCursorHover,
 });
 
 const LauncherButton = () => Widget.Button({
-    className: 'dock-app-btn dock-app-btn-animate',
+    className: 'dock-app-btn dock-app-btn-animate transparent-bg',
     tooltipText: 'Open launcher',
     child: Widget.Box({
         homogeneous: true,
-        className: 'dock-app-icon',
+        className: 'dock-app-icon transparent-bg',
         child: Widget.Icon({
             icon: 'view-grid-symbolic', // Using Adwaita symbolic icon
         }),
@@ -87,18 +87,19 @@ const AppButton = ({ icon, ...rest }) => Widget.Revealer({
     transitionDuration: userOptions.animations.durationLarge,
     child: Widget.Button({
         ...rest,
-        className: 'dock-app-btn dock-app-btn-animate',
+        className: 'dock-app-btn dock-app-btn-animate transparent-bg',
         child: Widget.Box({
+            className: 'transparent-bg',
             child: Widget.Overlay({
                 child: Widget.Box({
                     homogeneous: true,
-                    className: 'dock-app-icon',
+                    className: 'dock-app-icon transparent-bg',
                     child: Widget.Icon({
                         icon: `${icon}-symbolic`, // Ensure symbolic icon
                     }),
                 }),
                 overlays: [Widget.Box({
-                    class_name: 'indicator',
+                    class_name: 'indicator transparent-bg',
                     vpack: 'end',
                     hpack: 'center',
                 })],
@@ -111,7 +112,7 @@ const AppButton = ({ icon, ...rest }) => Widget.Revealer({
 });
 
 const Taskbar = (monitor) => Widget.Box({
-    className: 'dock-apps',
+    className: 'dock-apps transparent-bg',
     attribute: {
         monitor: monitor,
         'map': new Map(),
@@ -192,7 +193,7 @@ const Taskbar = (monitor) => Widget.Box({
 });
 
 const PinnedApps = () => Widget.Box({
-    class_name: 'dock-apps',
+    class_name: 'dock-apps transparent-bg',
     homogeneous: true,
     children: userOptions.dock.pinnedApps
         .map(term => ({ app: Applications.query(term)?.[0], term }))
@@ -232,7 +233,7 @@ const PinnedApps = () => Widget.Box({
 
 export default (monitor = 0) => {
     const dockContent = Box({
-        className: 'dock-bg spacing-h-5',
+        className: 'dock-bg spacing-h-5 transparent-bg',
         children: [
             PinButton(),
             PinnedApps(),
@@ -288,6 +289,7 @@ export default (monitor = 0) => {
         },
         child: Box({
             homogeneous: true,
+            className: 'transparent-bg',
             css: `min-height: ${userOptions.dock.hiddenThickness}px;`,
             children: [dockRevealer],
         }),

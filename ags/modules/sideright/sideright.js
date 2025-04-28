@@ -74,7 +74,7 @@ const centerWidgets = [
 
 // Uptime bar
 const timeRow = Box({
-    className: 'spacing-h-10 sidebar-group-invisible-morehorizpad',
+    className: 'spacing-h-10 sidebar-group-invisible-morehorizpad transparent-bg',
     children: [
         Widget.Icon({
             icon: getDistroIcon(),
@@ -130,17 +130,24 @@ const timeRow = Box({
 // Quick toggles box
 const togglesBox = Box({
     hpack: 'center',
-    className: 'sidebar-togglesbox spacing-h-5',
+    className: 'sidebar-togglesbox spacing-h-5 transparent-bg',
     children: userOptions.sidebar.quickToggles.order.map(toggle => QUICK_TOGGLES[toggle])
 });
 
 // Sidebar options stack
 export const sidebarOptionsStack = ExpandingIconTabContainer({
     tabsHpack: 'center',
+<<<<<<< HEAD
     tabSwitcherClassName: 'sidebar-icontabswitcher',
     icons: centerWidgets.map(api => api.materialIcon),
     names: centerWidgets.map(api => api.name),
     children: centerWidgets.map(api => api.contentWidget()),
+=======
+    tabSwitcherClassName: 'sidebar-icontabswitcher transparent-bg',
+    icons: centerWidgets.map((api) => api.materialIcon),
+    names: centerWidgets.map((api) => api.name),
+    children: centerWidgets.map((api) => api.contentWidget()),
+>>>>>>> 4e8d5b1 (upgrades)
     onChange: (self, id) => {
         self.shown = centerWidgets[id].name;
         if (centerWidgets[id].onFocus) centerWidgets[id].onFocus();
@@ -153,6 +160,7 @@ export default () => Box({
     hexpand: true,
     className: 'side',    // ← ADDED THIS LINE FOR TRANSPARENT BACKGROUND
     css: 'min-width: 2px;',
+    className: 'transparent-bg',
     children: [
         EventBox({
             onPrimaryClick: () => App.closeWindow('sideright'),
@@ -162,18 +170,18 @@ export default () => Box({
         Box({
             vertical: true,
             vexpand: true,
-            className: 'sidebar-right spacing-v-15',
+            className: 'sidebar-right spacing-v-15 transparent-bg',
             children: [
                 Box({
                     vertical: true,
-                    className: 'spacing-v-5',
+                    className: 'spacing-v-5 transparent-bg',
                     children: [
                         timeRow,
                         togglesBox,
                     ]
                 }),
                 Box({
-                    className: 'sidebar-group',
+                    className: 'sidebar-group transparent-bg',
                     children: [
                         sidebarOptionsStack,
                     ],
@@ -189,5 +197,11 @@ export default () => Box({
             } else if (checkKeybind(event, userOptions.keybinds.sidebar.options.prevTab)) {
                 sidebarOptionsStack.prevTab();
             }
+<<<<<<< HEAD
         }),
 });
+=======
+        })
+    ,
+});
+>>>>>>> 4e8d5b1 (upgrades)

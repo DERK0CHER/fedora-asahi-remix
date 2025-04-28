@@ -9,8 +9,15 @@ export function substitute(str) {
     // Always try to use adwaita-symbolic icons first
     const symbolicName = `${str}-symbolic`;
     
+    // Check if the icon exists in the icon theme
     if (iconExists(symbolicName)) {
         return symbolicName;
+    }
+    
+    // Check if there's a custom icon in /assets/icons
+    const customIconPath = `${App.configDir}/assets/icons/${str}-symbolic.svg`;
+    if (GLib.file_test(customIconPath, GLib.FileTest.EXISTS)) {
+        return customIconPath;
     }
     
     // Normal substitutions as fallback

@@ -296,4 +296,4 @@ export default (monitor = 0) => {
             clearTimes();
         })
     });
-}git 
+}

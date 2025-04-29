@@ -10,7 +10,7 @@ import { StatusIcons } from '../../.commonwidgets/statusicons.js';
 import { Tray } from "./tray.js";
 import { distance } from '../../.miscutils/mathfuncs.js';
 
-const OSD_DISMISS_DISTANCE = 10;
+const OSD_DISMISS_DISTANCE = 5;
 
 const SeparatorDot = () => Widget.Revealer({
     transition: 'slide_left',

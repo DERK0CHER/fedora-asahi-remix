@@ -19,11 +19,17 @@
         "pages": {
             "defaultPage": "apis",
             "apis": {
-                "defaultPage": "gemini"
+                "defaultPage": "gpt"
             }
         },
         "calendar": {
             "expandByDefault": true
+        },
+        "image": {
+            "allowNsfw": true
         }
+    },
+    "ai": {
+        "defaultGPTProvider": "openai"
     }
 }

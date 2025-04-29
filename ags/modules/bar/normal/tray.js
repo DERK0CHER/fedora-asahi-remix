@@ -2,24 +2,10 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import SystemTray from 'resource:///com/github/Aylur/ags/service/systemtray.js';
 const { Box, Icon, Button, Revealer } = Widget;
 const { Gravity } = imports.gi.Gdk;
-import { substitute } from '../../.miscutils/icons.js';
-
-const exists = (path) => Gio.File.new_for_path(path).query_exists(null);
 
 const SysTrayItem = (item) => item.id !== null ? Button({
     className: 'bar-systray-item',
-    child: Icon({ 
-        hpack: 'center',
-        setup: icon => icon.hook(item, () => {
-            // Try to convert to symbolic if needed
-            const iconName = item.icon.toString();
-            if (iconName && !iconName.endsWith('-symbolic')) {
-                icon.icon = substitute(iconName);
-            } else {
-                icon.icon = iconName;
-            }
-        }, 'icon')
-    }),
+    child: Icon({ hpack: 'center' }).bind('icon', item, 'icon'),
     setup: (self) => self
         .hook(item, (self) => self.tooltipMarkup = item['tooltip-markup'])
     ,

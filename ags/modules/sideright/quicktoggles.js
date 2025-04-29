@@ -8,7 +8,7 @@ import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 const { execAsync, exec } = Utils;
 import { BluetoothIndicator, NetworkIndicator } from '../.commonwidgets/statusicons.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
-import { substitute } from '../.miscutils/icons.js';
+import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { sidebarOptionsStack } from './sideright.js';
 
 export const ToggleIconWifi = (props = {}) => Widget.Button({
@@ -67,12 +67,7 @@ export const HyprToggleIcon = async (icon, name, hyprlandConfigValue, props = {}
                     button.toggleClassName('sidebar-button-active', currentOption == 0);
                 }).catch(print);
             },
-            child: Widget.Icon({
-                // Use substitute to ensure we get symbolic icons
-                icon: substitute(icon),
-                hpack: 'center',
-                className: 'txt-norm'
-            }),
+            child: MaterialIcon(icon, 'norm', { hpack: 'center' }),
             setup: button => {
                 button.toggleClassName('sidebar-button-active', JSON.parse(Utils.exec(`hyprctl -j getoption ${hyprlandConfigValue}`)).int == 1);
                 setupCursorHover(button);
@@ -110,11 +105,7 @@ export const ModuleNightLight = async (props = {}) => {
                 })
                 .catch(print);
         },
-        child: Widget.Icon({
-            // Use night-light-symbolic from Adwaita
-            icon: 'night-light-symbolic',
-            className: 'txt-norm'
-        }),
+        child: MaterialIcon('nightlight', 'norm'),
         setup: (self) => {
             setupCursorHover(self);
             self.attribute.enabled = !!exec('pidof gammastep');
@@ -139,8 +130,7 @@ export const ModuleCloudflareWarp = async (props = {}) => {
             else Utils.execAsync('warp-cli disconnect').catch(print);
         },
         child: Widget.Icon({
-            // Using network-vpn-symbolic for Cloudflare WARP
-            icon: 'network-vpn-symbolic',
+            icon: 'cloudflare-dns-symbolic',
             className: 'txt-norm',
         }),
         setup: (self) => {
@@ -159,6 +149,7 @@ export const ModuleInvertColors = async (props = {}) => {
             className: 'txt-small sidebar-iconbutton',
             tooltipText: getString('Color inversion'),
             onClicked: (button) => {
+                // const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
                 Hyprland.messageAsync('j/getoption decoration:screen_shader')
                     .then((output) => {
                         const shaderPath = JSON.parse(output)["str"].trim();
@@ -173,11 +164,7 @@ export const ModuleInvertColors = async (props = {}) => {
                         }
                     })
             },
-            child: Widget.Icon({
-                // Using display-brightness-symbolic for invert colors
-                icon: 'display-brightness-symbolic',
-                className: 'txt-norm'
-            }),
+            child: MaterialIcon('invert_colors', 'norm'),
             setup: setupCursorHover,
             ...props,
         })
@@ -207,11 +194,7 @@ export const ModuleRawInput = async (props = {}) => {
                         }
                     })
             },
-            child: Widget.Icon({
-                // Using input-mouse-symbolic
-                icon: 'input-mouse-symbolic',
-                className: 'txt-norm'
-            }),
+            child: MaterialIcon('mouse', 'norm'),
             setup: setupCursorHover,
             ...props,
         })
@@ -240,11 +223,7 @@ export const ModuleGameMode = async (props = {}) => {
                         button.toggleClassName('sidebar-button-active', enabled);
                     })
             },
-            child: Widget.Icon({
-                // Using applications-games-symbolic for game mode
-                icon: 'applications-games-symbolic',
-                className: 'txt-norm'
-            }),
+            child: MaterialIcon('gamepad', 'norm'),
             setup: setupCursorHover,
             ...props,
         })
@@ -265,11 +244,7 @@ export const ModuleIdleInhibitor = (props = {}) => Widget.Button({ // TODO: Make
         if (self.attribute.enabled) Utils.execAsync(['bash', '-c', `pidof wayland-idle-inhibitor.py || ${App.configDir}/scripts/wayland-idle-inhibitor.py`]).catch(print)
         else Utils.execAsync('pkill -f wayland-idle-inhibitor.py').catch(print);
     },
-    child: Widget.Icon({
-        // Using alarm-symbolic for idle inhibitor
-        icon: 'alarm-symbolic',
-        className: 'txt-norm'
-    }),
+    child: MaterialIcon('coffee', 'norm'),
     setup: (self) => {
         setupCursorHover(self);
         self.attribute.enabled = !!exec('pidof wayland-idle-inhibitor.py');
@@ -286,10 +261,7 @@ export const ModuleReloadIcon = (props = {}) => Widget.Button({
         execAsync(['bash', '-c', 'hyprctl reload || swaymsg reload &']);
         App.closeWindow('sideright');
     },
-    child: Widget.Icon({
-        icon: 'view-refresh-symbolic',
-        className: 'txt-norm'
-    }),
+    child: MaterialIcon('refresh', 'norm'),
     setup: button => {
         setupCursorHover(button);
     }
@@ -303,10 +275,7 @@ export const ModuleSettingsIcon = (props = {}) => Widget.Button({
         execAsync(['bash', '-c', `${userOptions.apps.settings}`, '&']);
         App.closeWindow('sideright');
     },
-    child: Widget.Icon({
-        icon: 'preferences-system-symbolic',
-        className: 'txt-norm'
-    }),
+    child: MaterialIcon('settings', 'norm'),
     setup: button => {
         setupCursorHover(button);
     }
@@ -320,32 +289,8 @@ export const ModulePowerIcon = (props = {}) => Widget.Button({
         closeEverything();
         Utils.timeout(1, () => openWindowOnAllMonitors('session'));
     },
-    child: Widget.Icon({
-        icon: 'system-shutdown-symbolic',
-        className: 'txt-norm'
-    }),
+    child: MaterialIcon('power_settings_new', 'norm'),
     setup: button => {
         setupCursorHover(button);
     }
 })
-
-// Apply CSS for transparency (safer approach)
-App.connect('config-parsed', () => {
-    // Add custom CSS for transparent sidebar buttons
-    App.applyCss(`
-        .sidebar-iconbutton, .sidebar-button-active, .txt-small, .txt-norm {
-            background-color: transparent !important;
-            background-image: none !important;
-            box-shadow: none !important;
-        }
-        
-        /* Global bar and sidebar transparency */
-        .bar-bg, .bar-bg-focus, .bar-bg-nothing, .bar-group, .corner, .corner-black,
-        .bar-batt, .bar-ram-icon, .bar-cpu-icon, .bar-swap-icon,
-        .bar-util-btn, .bar-systray-item {
-            background-color: transparent !important;
-            background-image: none !important;
-            box-shadow: none !important;
-        }
-    `);
-});

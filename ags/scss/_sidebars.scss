@@ -192,11 +192,11 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 }
 
 .sidebar-calendar-btn {
-    background-color: rgba(255, 255, 255, 0.4) !important; /* 60% translucent */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
-    backdrop-filter: blur(10px) !important;
-    -gtk-icon-shadow: none !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    @include full-rounding;
+    @include element_decel;
+    min-height: 2.523rem;
+    min-width: 2.523rem;
+    color: $onSurface;
 }
 
 .sidebar-calendar-btn:hover,
@@ -415,12 +415,6 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
     background-color: $layer1;
     padding: 0.682rem;
 }
-//added
-.sidebar-moduleheader-box {
-    background-color: transparent !important;
-    box-shadow: none !important;
-    border: none !important;
-}
 
 .sidebar-module-btn-arrow {
     @include full-rounding;
@@ -544,7 +538,7 @@ $colorpicker_rounding: 0.341rem;
 .sidebar-icontabswitcher {
     @include full-rounding;
     @include group-padding;
-    background-color: transparent !important;
+    background-color: $layer1;
 }
 
 .sidebar-chat-providerswitcher {

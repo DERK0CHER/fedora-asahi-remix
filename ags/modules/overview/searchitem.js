@@ -24,12 +24,9 @@ export const searchItem = ({ materialIconName, name, actionName, content, onActi
                 Widget.Box({
                     vertical: false,
                     children: [
-                        Widget.Box({
-                            className: `overview-search-results-icon`,
-                            homogeneous: true,
-                            child: Widget.Icon({
-                                icon: materialIconName
-                            }),
+                        Widget.Label({
+                            className: `icon-material overview-search-results-icon`,
+                            label: `${materialIconName}`,
                         }),
                         Widget.Box({
                             vertical: true,

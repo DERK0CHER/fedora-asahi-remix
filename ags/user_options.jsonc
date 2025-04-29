@@ -15,21 +15,5 @@
 // "workspaces": {"shown": 8 }
 //
 {
-    "sidebar": {
-        "pages": {
-            "defaultPage": "apis",
-            "apis": {
-                "defaultPage": "gpt"
-            }
-        },
-        "calendar": {
-            "expandByDefault": true
-        },
-        "image": {
-            "allowNsfw": true
-        }
-    },
-    "ai": {
-        "defaultGPTProvider": "openai"
-    }
+    "animations": {}
 }

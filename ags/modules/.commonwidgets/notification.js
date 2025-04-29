@@ -61,12 +61,13 @@ const getFriendlyNotifTimeString = (timeObject) => {
 }
 
 const NotificationIcon = (notifObject) => {
+
     if (notifObject.hints?.image_path?.deepUnpack) {
         const imagePath = notifObject.hints.image_path.deepUnpack();
         return Box({
             valign: Gtk.Align.CENTER,
             hexpand: false,
-            className: 'notif-icon transparent-bg',
+            className: 'notif-icon',
             css: `
                 background-image: url("${imagePath}");
                 background-size: auto 100%;
@@ -80,7 +81,7 @@ const NotificationIcon = (notifObject) => {
         return Box({
             valign: Gtk.Align.CENTER,
             hexpand: false,
-            className: 'notif-icon transparent-bg',
+            className: 'notif-icon',
             css: `
                 background-image: url("${notifObject.image}");
                 background-size: auto 100%;
@@ -90,28 +91,25 @@ const NotificationIcon = (notifObject) => {
         });
     }
 
-    let icon = 'dialog-information-symbolic';
+    let icon = 'NO_ICON';
     if (Utils.lookUpIcon(notifObject.appIcon))
-        icon = substitute(notifObject.appIcon);
+        icon = notifObject.appIcon;
     if (Utils.lookUpIcon(notifObject.appEntry))
-        icon = substitute(notifObject.appEntry);
+        icon = notifObject.appEntry;
 
     return Box({
         vpack: 'center',
         hexpand: false,
-        className: `notif-icon notif-icon-material-${notifObject.urgency} transparent-bg`,
+        className: `notif-icon notif-icon-material-${notifObject.urgency}`,
         homogeneous: true,
         children: [
-            (icon != 'dialog-information-symbolic' ?
+            (icon != 'NO_ICON' ?
                 Icon({
                     vpack: 'center',
                     icon: icon,
                 })
                 :
-                Icon({
-                    icon: notifObject.urgency == 'critical' ? 
-                        'dialog-error-symbolic' : 
-                        guessMessageType(notifObject.summary.toLowerCase()),
+                MaterialIcon(`${notifObject.urgency == 'critical' ? 'release_alert' : guessMessageType(notifObject.summary.toLowerCase())}`, 'hugerass', {
                     hexpand: true,
                 })
             )
@@ -196,7 +194,6 @@ export default ({
         transition: 'slide_down',
         transitionDuration: userOptions.animations.durationLarge,
         child: Box({ // Box to make sure css-based spacing works
-            className: 'transparent-bg',
             homogeneous: true,
         }),
     });
@@ -223,7 +220,7 @@ export default ({
         revealChild: false,
         child: Box({
             vertical: true,
-            className: 'spacing-v-10 transparent-bg',
+            className: 'spacing-v-10',
             children: [
                 Label({
                     xalign: 0,
@@ -236,11 +233,11 @@ export default ({
                     label: processNotificationBody(notifObject.body, notifObject.appEntry)
                 }),
                 Box({
-                    className: 'notif-actions spacing-h-5 transparent-bg',
+                    className: 'notif-actions spacing-h-5',
                     children: [
                         Button({
                             hexpand: true,
-                            className: `notif-action notif-action-${notifObject.urgency} transparent-bg`,
+                            className: `notif-action notif-action-${notifObject.urgency}`,
                             onClicked: () => destroyWithAnims(),
                             setup: setupCursorHover,
                             child: Label({
@@ -249,7 +246,7 @@ export default ({
                         }),
                         ...notifObject.actions.map(action => Widget.Button({
                             hexpand: true,
-                            className: `notif-action notif-action-${notifObject.urgency} transparent-bg`,
+                            className: `notif-action notif-action-${notifObject.urgency}`,
                             onClicked: () => notifObject.invoke(action.id),
                             setup: setupCursorHover,
                             child: Label({
@@ -263,7 +260,6 @@ export default ({
     });
     const notifIcon = Box({
         vpack: 'start',
-        className: 'transparent-bg',
         homogeneous: true,
         children: [
             Overlay({
@@ -307,11 +303,9 @@ export default ({
     const notifText = Box({
         valign: Gtk.Align.CENTER,
         vertical: true,
-        className: 'transparent-bg',
         hexpand: true,
         children: [
             Box({
-                className: 'transparent-bg',
                 children: [
                     notifTextSummary,
                     notifTextBody,
@@ -323,7 +317,7 @@ export default ({
     });
     const notifExpandButton = Button({
         vpack: 'start',
-        className: 'notif-expand-btn transparent-bg',
+        className: 'notif-expand-btn',
         onClicked: (self) => {
             if (notifTextPreview.revealChild) { // Expanding...
                 notifTextPreview.revealChild = false;
@@ -345,11 +339,11 @@ export default ({
     });
     const notificationContent = Box({
         ...props,
-        className: `${isPopup ? 'popup-' : ''}notif-${notifObject.urgency} spacing-h-10 transparent-bg`,
+        className: `${isPopup ? 'popup-' : ''}notif-${notifObject.urgency} spacing-h-10`,
         children: [
             notifIcon,
             Box({
-                className: 'spacing-h-5 transparent-bg',
+                className: 'spacing-h-5',
                 children: [
                     notifText,
                     notifExpandButton,
@@ -394,7 +388,6 @@ export default ({
             'ready': false,
         },
         homogeneous: true,
-        className: 'transparent-bg',
         children: [notificationContent],
         setup: (self) => self
             .hook(gesture, self => {

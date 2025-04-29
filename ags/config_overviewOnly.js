@@ -13,7 +13,7 @@ import App from 'resource:///com/github/Aylur/ags/app.js'
 import Overview from './modules/overview/main.js';
 import { COMPILED_STYLE_DIR } from './init.js';
 
-handleStyles(false);
+handleStyles(true);
 
 App.config({
     css: `${COMPILED_STYLE_DIR}/style.css`,

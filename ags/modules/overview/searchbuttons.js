@@ -6,10 +6,9 @@ const { execAsync, exec } = Utils;
 import { searchItem } from './searchitem.js';
 import { execAndClose, couldBeMath, launchCustomCommand } from './miscfunctions.js';
 import GeminiService from '../../services/gemini.js';
-import { substitute } from '../.miscutils/icons.js';
 
 export const NoResultButton = () => searchItem({
-    materialIconName: 'error-symbolic',
+    materialIconName: 'Error',
     name: "Search invalid",
     content: "No results found!",
     onActivate: () => {
@@ -48,7 +47,7 @@ export const DirectoryButton = ({ parentPath, name, type, icon }) => {
                             className: 'overview-search-results-icon',
                             homogeneous: true,
                             child: Widget.Icon({
-                                icon: substitute(icon),
+                                icon: icon,
                             }),
                         }),
                         Widget.Label({
@@ -75,7 +74,7 @@ export const DirectoryButton = ({ parentPath, name, type, icon }) => {
 }
 
 export const CalculationResultButton = ({ result, text }) => searchItem({
-    materialIconName: 'accessories-calculator-symbolic',
+    materialIconName: 'calculate',
     name: `Math result`,
     actionName: "Copy",
     content: `${result}`,
@@ -116,7 +115,7 @@ export const DesktopEntryButton = (app) => {
                             className: 'overview-search-results-icon',
                             homogeneous: true,
                             child: Widget.Icon({
-                                icon: app.iconName.endsWith('-symbolic') ? app.iconName : `${app.iconName}-symbolic`,
+                                icon: app.iconName,
                             }),
                         }),
                         Widget.Label({
@@ -143,7 +142,7 @@ export const DesktopEntryButton = (app) => {
 }
 
 export const ExecuteCommandButton = ({ command, terminal = false }) => searchItem({
-    materialIconName: `${terminal ? 'utilities-terminal-symbolic' : 'system-run-symbolic'}`,
+    materialIconName: `${terminal ? 'terminal' : 'settings_b_roll'}`,
     name: `Run command`,
     actionName: `Execute ${terminal ? 'in terminal' : ''}`,
     content: `${command}`,
@@ -152,7 +151,7 @@ export const ExecuteCommandButton = ({ command, terminal = false }) => searchIte
 })
 
 export const CustomCommandButton = ({ text = '' }) => searchItem({
-    materialIconName: 'emblem-system-symbolic',
+    materialIconName: 'settings_suggest',
     name: 'Action',
     actionName: 'Run',
     content: `${text}`,
@@ -163,7 +162,7 @@ export const CustomCommandButton = ({ text = '' }) => searchItem({
 });
 
 export const SearchButton = ({ text = '' }) => searchItem({
-    materialIconName: 'system-search-symbolic',
+    materialIconName: 'travel_explore',
     name: 'Search the web',
     actionName: 'Go',
     content: `${text}`,
@@ -178,7 +177,7 @@ export const SearchButton = ({ text = '' }) => searchItem({
 });
 
 export const AiButton = ({ text }) => searchItem({
-    materialIconName: 'dialog-question-symbolic',
+    materialIconName: 'chat_paste_go',
     name: 'Ask Gemini',
     actionName: 'Ask',
     content: `${text}`,

@@ -7,22 +7,22 @@ const { EventBox, Button } = Widget;
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import Applications from 'resource:///com/github/Aylur/ags/service/applications.js';
 const { execAsync, exec } = Utils;
-const { Box } = Widget;
+const { Box, Revealer } = Widget;
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { getAllFiles, searchIcons } from './icons.js'
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { substitute } from '../.miscutils/icons.js';
 
-const icon_files = userOptions.icons.searchPaths.map(e => getAllFiles(e)).flat(1);
+const icon_files = userOptions.icons.searchPaths.map(e => getAllFiles(e)).flat(1)
 
-let isPinned = false;
-let cachePath = new Map();
+let isPinned = false
+let cachePath = new Map()
 
-let timers = [];
+let timers = []
 
 function clearTimes() {
-    timers.forEach(e => GLib.source_remove(e));
-    timers = [];
+    timers.forEach(e => GLib.source_remove(e))
+    timers = []
 }
 
 function ExclusiveWindow(client) {
@@ -32,51 +32,47 @@ function ExclusiveWindow(client) {
         (client) => client.title.includes("win"),
         // Vscode
         (client) => client.title === '' && client.class === ''
-    ];
+    ]
 
     for (const item of fn) { if (item(client)) { return true } }
-    return false;
+    return false
 }
 
 const focus = ({ address }) => Utils.execAsync(`hyprctl dispatch focuswindow address:${address}`).catch(print);
 
 const DockSeparator = (props = {}) => Box({
     ...props,
-    className: 'dock-separator transparent-bg',
-});
+    className: 'dock-separator',
+})
 
 const PinButton = () => Widget.Button({
-    className: 'dock-app-btn dock-app-btn-animate transparent-bg',
+    className: 'dock-app-btn dock-app-btn-animate',
     tooltipText: 'Pin Dock',
     child: Widget.Box({
         homogeneous: true,
-        className: 'dock-app-icon transparent-bg',
-        child: Widget.Icon({
-            icon: 'pin-symbolic', // Using Adwaita symbolic icon
-        }),
+        className: 'dock-app-icon txt',
+        child: MaterialIcon('push_pin', 'hugeass')
     }),
     onClicked: (self) => {
-        isPinned = !isPinned;
-        self.className = `${isPinned ? "pinned-dock-app-btn" : "dock-app-btn animate"} dock-app-btn-animate transparent-bg`;
+        isPinned = !isPinned
+        self.className = `${isPinned ? "pinned-dock-app-btn" : "dock-app-btn animate"} dock-app-btn-animate`
     },
     setup: setupCursorHover,
-});
+})
 
 const LauncherButton = () => Widget.Button({
-    className: 'dock-app-btn dock-app-btn-animate transparent-bg',
+    className: 'dock-app-btn dock-app-btn-animate',
     tooltipText: 'Open launcher',
     child: Widget.Box({
         homogeneous: true,
-        className: 'dock-app-icon transparent-bg',
-        child: Widget.Icon({
-            icon: 'view-grid-symbolic', // Using Adwaita symbolic icon
-        }),
+        className: 'dock-app-icon txt',
+        child: MaterialIcon('apps', 'hugerass')
     }),
     onClicked: (self) => {
         App.toggleWindow('overview');
     },
     setup: setupCursorHover,
-});
+})
 
 const AppButton = ({ icon, ...rest }) => Widget.Revealer({
     attribute: {
@@ -87,19 +83,18 @@ const AppButton = ({ icon, ...rest }) => Widget.Revealer({
     transitionDuration: userOptions.animations.durationLarge,
     child: Widget.Button({
         ...rest,
-        className: 'dock-app-btn dock-app-btn-animate transparent-bg',
+        className: 'dock-app-btn dock-app-btn-animate',
         child: Widget.Box({
-            className: 'transparent-bg',
             child: Widget.Overlay({
                 child: Widget.Box({
                     homogeneous: true,
-                    className: 'dock-app-icon transparent-bg',
+                    className: 'dock-app-icon',
                     child: Widget.Icon({
-                        icon: `${icon}-symbolic`, // Ensure symbolic icon
+                        icon: icon,
                     }),
                 }),
                 overlays: [Widget.Box({
-                    class_name: 'indicator transparent-bg',
+                    class_name: 'indicator',
                     vpack: 'end',
                     hpack: 'center',
                 })],
@@ -112,7 +107,7 @@ const AppButton = ({ icon, ...rest }) => Widget.Revealer({
 });
 
 const Taskbar = (monitor) => Widget.Box({
-    className: 'dock-apps transparent-bg',
+    className: 'dock-apps',
     attribute: {
         monitor: monitor,
         'map': new Map(),
@@ -124,14 +119,18 @@ const Taskbar = (monitor) => Widget.Box({
                 const client = Hyprland.clients[i];
                 if (client["pid"] == -1) return;
                 const appClass = substitute(client.class);
-                let appClassLower = appClass.toLowerCase();
-                let path = '';
-                if (cachePath[appClassLower]) { path = cachePath[appClassLower]; }
+                // for (const appName of userOptions.dock.pinnedApps) {
+                //     if (appClass.includes(appName.toLowerCase()))
+                //         return null;
+                // }
+                let appClassLower = appClass.toLowerCase()
+                let path = ''
+                if (cachePath[appClassLower]) { path = cachePath[appClassLower] }
                 else {
-                    path = searchIcons(appClass.toLowerCase(), icon_files);
-                    cachePath[appClassLower] = path;
+                    path = searchIcons(appClass.toLowerCase(), icon_files)
+                    cachePath[appClassLower] = path
                 }
-                if (path === '') { path = substitute(appClass); }
+                if (path === '') { path = substitute(appClass) }
                 const newButton = AppButton({
                     icon: path,
                     tooltipText: `${client.title} (${appClass})`,
@@ -151,21 +150,21 @@ const Taskbar = (monitor) => Widget.Box({
             const newClient = Hyprland.clients.find(client => {
                 return client.address == address;
             });
-            if (ExclusiveWindow(newClient)) { return; }
-            let appClass = newClient.class;
-            let appClassLower = appClass.toLowerCase();
-            let path = '';
-            if (cachePath[appClassLower]) { path = cachePath[appClassLower]; }
+            if (ExclusiveWindow(newClient)) { return }
+            let appClass = newClient.class
+            let appClassLower = appClass.toLowerCase()
+            let path = ''
+            if (cachePath[appClassLower]) { path = cachePath[appClassLower] }
             else {
-                path = searchIcons(appClassLower, icon_files);
-                cachePath[appClassLower] = path;
+                path = searchIcons(appClassLower, icon_files)
+                cachePath[appClassLower] = path
             }
-            if (path === '') { path = substitute(appClass); }
+            if (path === '') { path = substitute(appClass) }
             const newButton = AppButton({
                 icon: path,
                 tooltipText: `${newClient.title} (${appClass})`,
                 onClicked: () => focus(newClient),
-            });
+            })
             newButton.attribute.workspace = newClient.workspace.id;
             box.attribute.map.set(address, newButton);
             box.children = Array.from(box.attribute.map.values());
@@ -182,28 +181,28 @@ const Taskbar = (monitor) => Widget.Box({
                 removedButton.destroy();
                 box.attribute.map.delete(address);
                 box.children = Array.from(box.attribute.map.values());
-            });
+            })
         },
     },
     setup: (self) => {
         self.hook(Hyprland, (box, address) => box.attribute.add(box, address, self.monitor), 'client-added')
-            .hook(Hyprland, (box, address) => box.attribute.remove(box, address, self.monitor), 'client-removed');
+            .hook(Hyprland, (box, address) => box.attribute.remove(box, address, self.monitor), 'client-removed')
         Utils.timeout(100, () => self.attribute.update(self));
     },
 });
 
 const PinnedApps = () => Widget.Box({
-    class_name: 'dock-apps transparent-bg',
+    class_name: 'dock-apps',
     homogeneous: true,
     children: userOptions.dock.pinnedApps
         .map(term => ({ app: Applications.query(term)?.[0], term }))
         .filter(({ app }) => app)
         .map(({ app, term = true }) => {
             const newButton = AppButton({
-                // Always use adwaita-symbolic icons
+                // different icon, emm...
                 icon: userOptions.dock.searchPinnedAppIcons ?
-                    `${searchIcons(app.name, icon_files)}-symbolic` :
-                    `${app.icon_name}-symbolic`,
+                    searchIcons(app.name, icon_files) :
+                    app.icon_name,
                 onClicked: () => {
                     for (const client of Hyprland.clients) {
                         if (client.class.toLowerCase().includes(term))
@@ -223,9 +222,9 @@ const PinnedApps = () => Widget.Box({
                         button.toggleClassName('notrunning', !running);
                         button.toggleClassName('focused', Hyprland.active.client.address == running.address);
                         button.set_tooltip_text(running ? running.title : app.name);
-                    }, 'notify::clients');
+                    }, 'notify::clients')
                 },
-            });
+            })
             newButton.revealChild = true;
             return newButton;
         }),
@@ -233,7 +232,7 @@ const PinnedApps = () => Widget.Box({
 
 export default (monitor = 0) => {
     const dockContent = Box({
-        className: 'dock-bg spacing-h-5 transparent-bg',
+        className: 'dock-bg spacing-h-5',
         children: [
             PinButton(),
             PinnedApps(),
@@ -241,7 +240,7 @@ export default (monitor = 0) => {
             Taskbar(),
             LauncherButton(),
         ]
-    });
+    })
     const dockRevealer = Revealer({
         attribute: {
             'updateShow': self => { // I only use mouse to resize. I don't care about keyboard resize if that's a thing
@@ -250,7 +249,7 @@ export default (monitor = 0) => {
                 else
                     self.revealChild = true;
 
-                return self.revealChild;
+                return self.revealChild
             }
         },
         revealChild: false,
@@ -259,43 +258,43 @@ export default (monitor = 0) => {
         child: dockContent,
         setup: (self) => {
             const callback = (self, trigger) => {
-                if (!userOptions.dock.trigger.includes(trigger)) return;
-                const flag = self.attribute.updateShow(self);
+                if (!userOptions.dock.trigger.includes(trigger)) return
+                const flag = self.attribute.updateShow(self)
 
                 if (flag) clearTimes();
 
-                const hidden = userOptions.dock.autoHide.find(e => e["trigger"] === trigger);
+                const hidden = userOptions.dock.autoHide.find(e => e["trigger"] === trigger)
 
                 if (hidden) {
                     let id = Utils.timeout(hidden.interval, () => {
-                        if (!isPinned) { self.revealChild = false; }
-                        timers = timers.filter(e => e !== id);
-                    });
-                    timers.push(id);
+                        if (!isPinned) { self.revealChild = false }
+                        timers = timers.filter(e => e !== id)
+                    })
+                    timers.push(id)
                 }
-            };
+            }
 
             self
+                // .hook(Hyprland, (self) => self.attribute.updateShow(self))
                 .hook(Hyprland.active.workspace, self => callback(self, "workspace-active"))
                 .hook(Hyprland.active.client, self => callback(self, "client-active"))
                 .hook(Hyprland, self => callback(self, "client-added"), "client-added")
-                .hook(Hyprland, self => callback(self, "client-removed"), "client-removed");
+                .hook(Hyprland, self => callback(self, "client-removed"), "client-removed")
         },
-    });
+    })
     return EventBox({
         onHover: () => {
             dockRevealer.revealChild = true;
-            clearTimes();
+            clearTimes()
         },
         child: Box({
             homogeneous: true,
-            className: 'transparent-bg',
             css: `min-height: ${userOptions.dock.hiddenThickness}px;`,
             children: [dockRevealer],
         }),
         setup: self => self.on("leave-notify-event", () => {
             if (!isPinned) dockRevealer.revealChild = false;
-            clearTimes();
+            clearTimes()
         })
-    });
+    })
 }

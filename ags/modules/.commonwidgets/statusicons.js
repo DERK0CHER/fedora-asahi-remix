@@ -8,7 +8,6 @@ import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
 import { languages } from './statusicons_languages.js';
-import { substitute } from '../.miscutils/icons.js';
 
 // A guessing func to try to support langs not listed in data/languages.js
 function isLanguageMatch(abbreviation, word) {
@@ -33,10 +32,7 @@ export const MicMuteIndicator = () => Widget.Revealer({
     setup: (self) => self.hook(Audio, (self) => {
         self.revealChild = Audio.microphone?.stream?.isMuted;
     }),
-    child: Widget.Icon({
-        icon: 'microphone-disabled-symbolic',
-        className: 'txt-norm'
-    }),
+    child: MaterialIcon('mic_off', 'norm'),
 });
 
 export const NotificationIndicator = (notifCenterName = 'sideright') => {
@@ -58,10 +54,7 @@ export const NotificationIndicator = (notifCenterName = 'sideright') => {
         ,
         child: Widget.Box({
             children: [
-                Widget.Icon({
-                    icon: 'notification-symbolic',
-                    className: 'txt-norm'
-                }),
+                MaterialIcon('notifications', 'norm'),
                 Widget.Label({
                     className: 'txt-small titlefont',
                     attribute: {
@@ -93,9 +86,9 @@ export const BluetoothIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
     transitionDuration: userOptions.animations.durationSmall,
     children: {
-        'disabled': Widget.Icon({ className: 'txt-norm', icon: 'bluetooth-disabled-symbolic' }),
-        'enabled': Widget.Icon({ className: 'txt-norm', icon: 'bluetooth-symbolic' }),
-        'connected': Widget.Icon({ className: 'txt-norm', icon: 'bluetooth-active-symbolic' }),
+        'disabled': Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth_disabled' }),
+        'enabled': Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth' }),
+        'connected': Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth_connected' }),
     },
     setup: (self) =>
         self.hook(Bluetooth, (stack) => {
@@ -118,10 +111,7 @@ const BluetoothDevices = () => Widget.Box({
                 vpack: 'center',
                 tooltipText: device.name,
                 children: [
-                    Widget.Icon({
-                        // Use substitute to ensure symbolic icons
-                        icon: substitute(device.iconName)
-                    }),
+                    Widget.Icon(`${device.iconName}-symbolic`),
                     ...(device.batteryPercentage ? [Widget.Label({
                         className: 'txt-smallie',
                         label: `${device.batteryPercentage}`,
@@ -143,10 +133,10 @@ const NetworkWiredIndicator = () => Widget.Stack({
     transitionDuration: userOptions.animations.durationSmall,
     children: {
         'fallback': SimpleNetworkIndicator(),
-        'unknown': Widget.Icon({ className: 'txt-norm', icon: 'network-wired-disconnected-symbolic' }),
-        'disconnected': Widget.Icon({ className: 'txt-norm', icon: 'network-wired-disconnected-symbolic' }),
-        'connected': Widget.Icon({ className: 'txt-norm', icon: 'network-wired-symbolic' }),
-        'connecting': Widget.Icon({ className: 'txt-norm', icon: 'network-wired-acquiring-symbolic' }),
+        'unknown': Widget.Label({ className: 'txt-norm icon-material', label: 'wifi_off' }),
+        'disconnected': Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_off' }),
+        'connected': Widget.Label({ className: 'txt-norm icon-material', label: 'lan' }),
+        'connecting': Widget.Label({ className: 'txt-norm icon-material', label: 'settings_ethernet' }),
     },
     setup: (self) => self.hook(Network, stack => {
         if (!Network.wired)
@@ -165,8 +155,8 @@ const NetworkWiredIndicator = () => Widget.Stack({
 const SimpleNetworkIndicator = () => Widget.Icon({
     setup: (self) => self.hook(Network, self => {
         const icon = Network[Network.primary || 'wifi']?.iconName;
-        self.icon = icon ? substitute(icon) : '';
-        self.visible = !!icon;
+        self.icon = icon || '';
+        self.visible = icon;
     }),
 });
 
@@ -174,14 +164,17 @@ const NetworkWifiIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
     transitionDuration: userOptions.animations.durationSmall,
     children: {
-        'disabled': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-disabled-symbolic' }),
-        'disconnected': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-disconnected-symbolic' }),
-        'connecting': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-acquiring-symbolic' }),
-        '0': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-signal-none-symbolic' }),
-        '1': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-signal-weak-symbolic' }),
-        '2': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-signal-ok-symbolic' }),
-        '3': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-signal-good-symbolic' }),
-        '4': Widget.Icon({ className: 'txt-norm', icon: 'network-wireless-signal-excellent-symbolic' }),
+        'disabled': Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_off' }),
+		'disconnected': Widget.Label({
+			className: 'txt-norm icon-material',
+			label: 'signal_wifi_statusbar_not_connected',
+		}),
+        'connecting': Widget.Label({ className: 'txt-norm icon-material', label: 'settings_ethernet' }),
+        '0': Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_0_bar' }),
+        '1': Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_1_bar' }),
+        '2': Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_2_bar' }),
+        '3': Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_3_bar' }),
+        '4': Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_4_bar' }),
     },
     setup: (self) => self.hook(Network, (stack) => {
         if (!Network.wifi) {
@@ -232,6 +225,15 @@ const HyprlandXkbKeyboardLayout = async ({ useFlag } = {}) => {
             initLangs = [...new Set(initLangs)];
             languageStackArray = Array.from({ length: initLangs.length }, (_, i) => {
                 const lang = languages.find(lang => lang.layout == initLangs[i]);
+                // if (!lang) return [
+                //     initLangs[i],
+                //     Widget.Label({ label: initLangs[i] })
+                // ];
+                // return [
+                //     lang.layout,
+                //     Widget.Label({ label: (useFlag ? lang.flag : lang.layout) })
+                // ];
+                // Object
                 if (!lang) return {
                     [initLangs[i]]: Widget.Label({ label: initLangs[i] })
                 };
@@ -265,9 +267,9 @@ const HyprlandXkbKeyboardLayout = async ({ useFlag } = {}) => {
                     widgetContent.shown = lang.layout;
                 }
                 else { // Attempt to support langs not listed
-                    lang = languageStackArray.find(lang => isLanguageMatch(Object.keys(lang)[0], layoutName));
+                    lang = languageStackArray.find(lang => isLanguageMatch(lang[0], layoutName));
                     if (!lang) stack.shown = 'undef';
-                    else stack.shown = Object.keys(lang)[0];
+                    else stack.shown = lang[0];
                 }
             }, 'keyboard-layout'),
         });
@@ -311,4 +313,4 @@ export const StatusIcons = (props = {}, monitor = 0) => Widget.Box({
             })
         ]
     })
-})
+});

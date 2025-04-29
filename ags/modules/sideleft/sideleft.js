@@ -88,7 +88,6 @@ export const widgetContent = TabContainer({
     names: CONTENTS.map((item) => item.friendlyName),
     children: CONTENTS.map((item) => item.content),
     className: 'sidebar-left spacing-v-10',
-    css: 'background-color: transparent !important;',
     initIndex: CONTENTS.findIndex(obj => obj.name === userOptions.sidebar.pages.defaultPage),
     onChange: (self, index) => {
         const pageName = CONTENTS[index].name;
@@ -110,7 +109,7 @@ export default () => {
     return Box({
         // vertical: true,
         vexpand: true,
-        css: 'min-width: 2px; background-color: transparent !important;',
+        css: 'min-width: 2px;',
         children: [
             widgetContent,
         ],

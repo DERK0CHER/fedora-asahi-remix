@@ -149,10 +149,9 @@ export const sidebarOptionsStack = ExpandingIconTabContainer({
 export default () => Box({
     vexpand: true,
     hexpand: true,
-    css: 'min-width: 2px; background-color: transparent !important;',
+    css: 'min-width: 2px;',
     children: [
         EventBox({
-            css: 'background-color: transparent !important;',
             onPrimaryClick: () => App.closeWindow('sideright'),
             onSecondaryClick: () => App.closeWindow('sideright'),
             onMiddleClick: () => App.closeWindow('sideright'),
@@ -160,12 +159,10 @@ export default () => Box({
         Box({
             vertical: true,
             vexpand: true,
-            css: 'background-color: transparent !important;',
             className: 'sidebar-right spacing-v-15',
             children: [
                 Box({
                     vertical: true,
-                    css: 'background-color: transparent !important;',
                     className: 'spacing-v-5',
                     children: [
                         timeRow,
@@ -173,7 +170,6 @@ export default () => Box({
                     ]
                 }),
                 Box({
-                    css: 'background-color: transparent !important;',
                     className: 'sidebar-group',
                     children: [
                         sidebarOptionsStack,

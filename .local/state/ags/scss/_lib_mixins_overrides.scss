@@ -1,0 +1,33 @@
+
+        @mixin symbolic-icon {
+            -gtk-icon-theme: 'Adwaita';
+        }
+        
+        // Variables to override for transparency
+        $transparent: true;
+        $background: transparent;
+        $surface: transparent;
+        $surfaceDim: transparent;
+        $surfaceBright: transparent;
+        $surfaceContainerLowest: transparent;
+        $surfaceContainerLow: transparent;
+        $surfaceContainer: transparent;
+        $surfaceContainerHigh: transparent;
+        $surfaceContainerHighest: transparent;
+        
+        // Force all backgrounds to be transparent
+        * {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+        
+        .window, .background, .csd, .container, .box {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+        
+        // Remove box shadows
+        * {
+            box-shadow: none !important;
+        }
+        

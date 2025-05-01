@@ -1,3 +1,13 @@
-/assets/icons/*
-!/assets/icons/.gitkeep
-
+# Ignore everything by default
+*
+.*
+# Except these directories
+!fedora-asahi-remix/
+!.config/
+!.local/
+!.cargo/
+# Inside the allowed folders, don't ignore their contents
+fedora-asahi-remix/**
+!.config/**
+!.local/**
+!.cargo/**

@@ -5,9 +5,12 @@
 !fedora-asahi-remix/
 !.config/
 !.local/
-!.cargo/
+
 # Inside the allowed folders, don't ignore their contents
 fedora-asahi-remix/**
+fedora-asahi-remix/.**
+
+
 !.config/**
 !.local/**
-!.cargo/**
+

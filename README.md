@@ -15,7 +15,7 @@ Instructions:
 
 ```bash
 # clone the repo
-git clone https://github.com/EisregenHaha/fedora-hyprland
+git clone 
 
 # change directories 
 cd fedora-hyprland

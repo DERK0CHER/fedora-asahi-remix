@@ -15,7 +15,7 @@ Instructions:
 
 ```bash
 # clone the repo
-git clone 
+git clone https://github.com/DERK0CHER/fedora-asahi-remix
 
 # change directories 
 cd fedora-hyprland

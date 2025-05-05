@@ -93,6 +93,121 @@ $bar_ws_width_focus_active: 2.045rem;
     border-bottom-right-radius: 1.364rem;
 }
 
+.bar-modules-selector {
+    padding: 4px 8px;
+    border-radius: 6px;
+    background-color: $surface-transparent;
+}
+
+.bar-module-btn {
+    padding: 2px 8px;
+    border-radius: 6px;
+    transition: $transition;
+    
+    &:hover {
+        background-color: $bg_hover;
+    }
+}
+
+.bar-module-btn-active {
+    background-color: $bg_active;
+    
+    &:hover {
+        background-color: $bg_active_hover;
+    }
+}
+
+.bar-command-chip {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background-color: $surface-transparent;
+    
+    &:hover {
+        background-color: $bg_hover;
+    }
+}
+
+.bar-command-chip-action {
+    background-color: $accent-transparent;
+    
+    &:hover {
+        background-color: $accent-hover;
+    }
+}
+
+.bar-button {
+    padding: 4px;
+    border-radius: 4px;
+    transition: $transition;
+    
+    &:hover {
+        background-color: $bg_hover;
+    }
+}
+
+.bar-tabs {
+    padding: 4px 8px;
+    border-radius: 6px;
+    background-color: $surface-transparent;
+}
+
+.bar-tab-button {
+    padding: 2px 8px;
+    border-radius: 6px;
+    transition: $transition;
+    
+    &:hover {
+        background-color: $bg_hover;
+    }
+}
+
+.bar-tab-active {
+    background-color: $bg_active;
+    
+    &:hover {
+        background-color: $bg_active_hover;
+    }
+}
+
+.bar-button {
+    padding: 4px;
+    border-radius: 4px;
+    transition: $transition;
+    
+    &:hover {
+        background-color: $bg_hover;
+    }
+}
+
+.bar-button-with-text {
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: $transition;
+    
+    &:hover {
+        background-color: $bg_hover;
+    }
+}
+
+.bar-action-button {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background-color: $accent-transparent;
+    transition: $transition;
+    
+    &:hover {
+        background-color: $accent-hover;
+    }
+}
+
+.bar-indicators {
+    margin-right: 5px;
+}
+
+.bar-windowtitle {
+    margin-left: 5px;
+}
+
 .bar-sidemodule {
     min-width: 26rem;
 }

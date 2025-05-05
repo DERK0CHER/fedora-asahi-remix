@@ -15,10 +15,7 @@ import { clamp } from '../../.miscutils/mathfuncs.js';
 
 export default () => {
     const selectedColor = new ColorPickerSelection();
-    function shouldUseBlackColor() {
-        return ((selectedColor.xAxis < 40 || (45 <= selectedColor.hue && selectedColor.hue <= 195)) &&
-            selectedColor.yAxis > 60);
-    }
+    // Color detection function removed - we're now using predefined themes
     const colorBlack = 'rgba(0,0,0,0.9)';
     const colorWhite = 'rgba(255,255,255,0.9)';
     const hueRange = Box({

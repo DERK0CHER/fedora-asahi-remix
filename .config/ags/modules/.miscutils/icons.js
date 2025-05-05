@@ -1,3 +1,4 @@
+
 const { Gtk } = imports.gi;
 
 export function iconExists(iconName) {

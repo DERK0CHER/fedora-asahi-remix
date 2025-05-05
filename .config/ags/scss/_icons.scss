@@ -1,0 +1,34 @@
+// Styles for symbolic icons from the slim directory
+.symbolic-icon {
+  min-width: 16px;
+  min-height: 16px;
+}
+
+// Black icons in light mode - for contrast on light backgrounds
+.symbolic-icon-light {
+  -gtk-icon-effect: none;
+  color: black;
+  
+  // Special class for SVG icons
+  &.svg-icon {
+    filter: brightness(0); // Makes SVG icons black
+  }
+}
+
+// White icons in dark mode - for contrast on dark backgrounds
+.symbolic-icon-dark {
+  -gtk-icon-effect: highlight;
+  color: white;
+  
+  // Special class for SVG icons
+  &.svg-icon {
+    filter: brightness(1); // Makes SVG icons white
+  }
+}
+
+// Apply to non-material icons
+.bar-symbolic-icon {
+  min-width: 16px;
+  min-height: 16px;
+  margin: 2px;
+}
